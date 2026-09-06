@@ -11,9 +11,14 @@ return [
     | API, giving you convenient access to each backend using identical
     | syntax for each. The default queue connection is defined below.
     |
+    | This application queues nothing, so the default is "sync": work runs in the
+    | request that asked for it. The jobs, job_batches and failed_jobs tables are
+    | not part of the schema, and the "database" connection below would look for
+    | them, so the default is set here as well as in the environment file.
+    |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'database'),
+    'default' => env('QUEUE_CONNECTION', 'sync'),
 
     /*
     |--------------------------------------------------------------------------
@@ -118,10 +123,14 @@ return [
     |
     | Supported drivers: "database-uuids", "dynamodb", "file", "null"
     |
+    | "null" here for the same reason: with no queue there is nothing to record,
+    | and the default driver would write to a failed_jobs table this schema does
+    | not have.
+    |
     */
 
     'failed' => [
-        'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
+        'driver' => env('QUEUE_FAILED_DRIVER', 'null'),
         'database' => env('DB_CONNECTION', 'sqlite'),
         'table' => 'failed_jobs',
     ],
