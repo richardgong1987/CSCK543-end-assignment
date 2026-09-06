@@ -2,9 +2,14 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\RecipeController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
+
+// Browsing recipes does not require an account; saving and rating them will.
+Route::get('recipes', [RecipeController::class, 'index'])->name('recipes.index');
+Route::get('recipes/{recipe}', [RecipeController::class, 'show'])->name('recipes.show');
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
