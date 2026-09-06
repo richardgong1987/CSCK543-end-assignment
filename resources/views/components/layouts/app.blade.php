@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ $title }} · {{ config('app.name', 'Laravel') }}</title>
+    <title>{{ $title }} · {{ config('app.name') }}</title>
 
     @fonts
 
@@ -24,7 +24,7 @@
     <nav aria-label="Main" class="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-4 p-6 text-sm">
         <div class="flex items-center gap-6">
             <a href="{{ route('home') }}" class="font-medium">
-                {{ config('app.name', 'Laravel') }}
+                {{ config('app.name') }}
             </a>
 
             <a href="{{ route('recipes.index') }}" class="underline-offset-4 hover:underline">

@@ -6,7 +6,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ $title }} · {{ config('app.name', 'Laravel') }}</title>
+        <title>{{ $title }} · {{ config('app.name') }}</title>
 
         @fonts
 
@@ -17,7 +17,7 @@
             <div class="flex flex-col gap-8">
                 <div class="flex flex-col items-center gap-4 text-center">
                     <a href="{{ route('home') }}" class="font-medium">
-                        {{ config('app.name', 'Laravel') }}
+                        {{ config('app.name') }}
                     </a>
 
                     <div class="space-y-2">

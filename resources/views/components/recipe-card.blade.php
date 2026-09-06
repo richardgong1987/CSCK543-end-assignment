@@ -19,14 +19,14 @@
     @endif
 
     <div class="flex flex-1 flex-col gap-3 p-5">
-        <h2 class="text-base font-medium">
+        <h3 class="text-base font-medium">
             <a
                 href="{{ route('recipes.show', $recipe) }}"
                 class="underline-offset-4 hover:underline focus:underline"
             >
                 {{ $recipe->title }}
             </a>
-        </h2>
+        </h3>
 
         <p class="flex-1 text-sm text-[#706f6c] dark:text-[#A1A09A]">
             {{ Str::limit($recipe->description, 120) }}
