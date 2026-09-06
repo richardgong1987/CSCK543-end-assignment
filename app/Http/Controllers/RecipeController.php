@@ -2,25 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Cuisine;
+use App\Models\DietaryTag;
+use App\Models\Ingredient;
 use App\Models\Recipe;
+use App\Services\RecipeSearch;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 class RecipeController extends Controller
 {
     /**
-     * A plain listing of every recipe. Search and sorting are added on top of this
-     * by the search workstream; the query below is deliberately unfiltered.
+     * The recipe listing, which is also the search results page: with no query string
+     * the same view shows every recipe in alphabetical order.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $recipes = Recipe::query()
-            ->with(['categories', 'dietaryTags', 'prepTimeBand', 'cookTimeBand'])
-            ->withAvg('ratings as average_rating', 'overall')
-            ->withCount('ratings')
-            ->orderBy('title')
-            ->paginate(12);
+        $search = RecipeSearch::fromQuery($request->query());
 
-        return view('recipes.index', ['recipes' => $recipes]);
+        return view('recipes.index', [
+            'search' => $search,
+            // withQueryString keeps the filters attached to the page links, so that
+            // page 2 of a search is still that search.
+            'recipes' => $search->query()->paginate(12)->withQueryString(),
+            'categories' => Category::orderBy('sort_order')->get(),
+            'dietaryTags' => DietaryTag::orderBy('name')->get(),
+            'cuisines' => Cuisine::orderBy('name')->get(),
+            'ingredientNames' => Ingredient::orderBy('name')->pluck('name'),
+        ]);
     }
 
     public function show(Recipe $recipe): View

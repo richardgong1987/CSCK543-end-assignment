@@ -47,7 +47,7 @@
             Remember me
         </label>
 
-        <x-primary-button>Log in</x-primary-button>
+        <x-primary-button class="w-full">Log in</x-primary-button>
     </form>
 
     <p class="text-center text-sm text-[#706f6c] dark:text-[#A1A09A]">

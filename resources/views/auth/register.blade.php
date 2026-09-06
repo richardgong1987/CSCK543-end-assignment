@@ -67,7 +67,7 @@
             <x-input-error field="password_confirmation" />
         </div>
 
-        <x-primary-button>Create account</x-primary-button>
+        <x-primary-button class="w-full">Create account</x-primary-button>
     </form>
 
     <p class="text-center text-sm text-[#706f6c] dark:text-[#A1A09A]">
