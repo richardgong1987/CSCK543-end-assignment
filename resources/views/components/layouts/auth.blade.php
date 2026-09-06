@@ -13,7 +13,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC] flex min-h-screen flex-col items-center justify-center p-6 lg:p-8">
-        <div class="w-full max-w-sm">
+        {{-- There is no navigation to skip past here, but the page still needs its
+             main landmark for anyone moving by landmark rather than by scrolling. --}}
+        <main class="w-full max-w-sm">
             <div class="flex flex-col gap-8">
                 <div class="flex flex-col items-center gap-4 text-center">
                     <a href="{{ route('home') }}" class="font-medium">
@@ -31,6 +33,6 @@
 
                 {{ $slot }}
             </div>
-        </div>
+        </main>
     </body>
 </html>
