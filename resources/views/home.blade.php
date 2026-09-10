@@ -36,6 +36,15 @@
             >browse all {{ $recipeCount }} recipes</a>.
         </p>
     </section>
+    {{-- Hero Section --}}
+    <section class="mb-10">
+        <img
+            src="{{ asset('images/recipes/mushroom-doner.jpg')}}"
+            alt="A colorful picture of delicious mushroom doner"
+            class="w-full rounded-lg object-cover shadow-md"
+            style="max-height: 320px;"
+        >
+    </section>
 
     <section aria-labelledby="courses-heading" class="mb-10">
         <h2 id="courses-heading" class="mb-3 text-lg font-medium">Browse by course</h2>

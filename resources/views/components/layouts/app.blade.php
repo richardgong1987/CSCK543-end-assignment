@@ -1,6 +1,6 @@
 @props(['title'])
 
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -63,5 +63,15 @@
 <main id="main-content" class="mx-auto max-w-4xl p-6 lg:p-8">
     {{ $slot }}
 </main>
+<footer class="border-t border-[#e3e3e0] dark:;border-[#3E3E3A] mt-12">
+    <div class="mx-auto max-w-4xl px-6 py-8 text-sm text-[#706f6c] dark:text-[#A1A09A]">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <p>&copy;{{ date('Y') }} Recipe App. All rights reserved.</p>
+            <p>CSK543 Group Project &middot; University of Liverpool</p>
+        </div>
+
+    </div>
+
+</footer>
 </body>
 </html>
