@@ -1,3 +1,4 @@
+
 <x-layouts.app title="Create an account" >
 
     <section class="grid place-items-center content-center gap-8 h-screen">
@@ -6,14 +7,14 @@
             <h1 class="text-3xl text-left">Register</h1>
             <h2 class="text-sm text-[#706f6c] dark:text-[#A1A09A]">Enter your details below to create your account</h2>
         </section>
-        <form 
-        method="POST" 
-        action="{{ route('register') }}" 
+        <form
+        method="POST"
+        action="{{ route('register') }}"
         class="
-            flex 
-            flex-col 
-            gap-6 
-            mx-auto 
+            flex
+            flex-col
+            gap-6
+            mx-auto
             max-w-md
             border
             rounded-md
@@ -111,3 +112,4 @@
         </p>
     </section>
 </x-layouts.app>
+@vite(['resources/js/register.validation.js'])
