@@ -1,7 +1,7 @@
 <x-layouts.app title="Log in to your account">
     <div class ="max-w-md mx-auto mt-40">
         <h1 class="text-2xl font-bold mb-6 text-center">Log in to your account </h1>
-        <p class="text-sm text-[#706f6c] dark:text-[#A1A09A] mb-6 text-center">Enter your email and password below to log in"</p>
+        <p class="text-sm text-[#706f6c] dark:text-[#A1A09A] mb-6 text-center">Enter your email and password below to log in</p>
 
         <form method="POST" action="{{ route('login') }}" 
         class="flex 
@@ -11,7 +11,10 @@
         m-8 
         shadow-md 
         rounded-md 
-        p-8">
+        p-8"
+        id = "loginForm"
+        novalidate
+        >
             @csrf
 
             <div class="grid gap-2">
@@ -27,10 +30,14 @@
                     required
                     autofocus
                 />
-
-                <x-input-error field="email" />
+                <p class="text-sm text-red-600 hidden" id="loginEmailError">
+                    Please enter a valid email address. 
+                </p>
+                @error('email')
+                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                @enderror
             </div>
-
+            {{-- PASSWORD ---}}
             <div class="grid gap-2">
                 <x-input-label for="password">Password</x-input-label>
 
@@ -42,10 +49,15 @@
                     autocomplete="current-password"
                     required
                 />
+                <p class="text-sm text-red-600 hidden" id="loginPasswordError">
+                    please enter your password.
+                </p>
 
-                <x-input-error field="password" />
+                @error('password')
+                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                @enderror
             </div>
-
+            {{-- REMEMBER ME ---}}
             <label for="remember" class="flex items-center gap-3 text-sm">
                 <input
                     id="remember"
@@ -66,4 +78,4 @@
             </a>
         </p>
     </div>
-</x-layouts.auth>
+</x-layouts.app>
