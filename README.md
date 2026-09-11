@@ -202,10 +202,14 @@ follow the controller.
 
 | File                                              | What it is                                                                              |
 | ------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `resources/views/components/layouts/app.blade.php` | The shell every normal page uses: skip link, header, nav, `<main>`. The nav shows the app name, a Recipes link, and either Log in / Register or the user's name and a Log out button. |
-| `resources/views/components/layouts/auth.blade.php` | The narrow centred card used by the login and registration pages only.                  |
+| `resources/views/components/layouts/app.blade.php` | The shell **every** page uses, the login and registration pages included: skip link, header, nav, `<main>`, footer. The nav shows the app name, a Recipes link, and either Log in / Register or the user's name and a Log out button. The footer carries the copyright line and the module credit. |
+| `resources/views/components/layouts/auth.blade.php` | The narrow centred card the auth pages used to use. **Nothing references it any more** — delete it, or move the auth pages back onto it; leaving a second layout that no page opts into only misleads the next reader. |
 
 A page opts into a layout with `<x-layouts.app title="...">`.
+
+`app.blade.php` puts `title` in `<title>` and nothing else, so **each page supplies its own
+`<h1>`** — the old auth layout rendered one for you, and login and register now write their own.
+Keep it to exactly one per page.
 
 ### Home page — `/`
 
@@ -275,6 +279,7 @@ Recipes resolve by `slug`, not by id — see `Recipe::getRouteKeyName()`.
 | ------------------------------------------------------ | -------------------------------------------------------- |
 | `app/Http/Controllers/Auth/RegisteredUserController.php` | Shows the form, validates it, creates the user, signs them in. |
 | `resources/views/auth/register.blade.php`               | Name, email, password and password confirmation.        |
+| `resources/js/register.validation.js`                   | The client-side checks. It is a Vite entry of its own (`vite.config.js`), pulled in by `@vite` at the foot of the register view rather than from the layout — any new page-specific script needs the same entry, or the page breaks once the assets are built. |
 
 Validation lives in the controller's `store()`: the name is required, the email must
 be well formed and unused, and the password must meet `Password::defaults()` and be
@@ -345,15 +350,15 @@ says what already exists, so nobody redoes work that is done.
 | **Saving favourites**      | The `favourites` table, the `Favourite` model and both relationships (`User::favouriteRecipes()`, `Recipe::favouritedBy()`) exist and are seeded. Missing: the save/remove button, the routes and the controller. |
 | **Rating a recipe**        | The `ratings` table, the `Rating` model, `User::ratings()` and `Recipe::ratings()` exist, sample scores are seeded, and search can already filter and sort on the average. Missing: any way for a user to leave one. Validate `overall` as `required\|integer\|between:1,5` and the three facets as `nullable\|integer\|between:1,5`, to match the database constraints. |
 | **The account page**       | `/dashboard` is a placeholder that only greets the user. It needs the saved recipes, the user's own ratings, and whatever profile editing we agree on.                                    |
-| **Client-side validation** | The brief asks for client-side **and** server-side validation. Server-side is complete. Client-side is only the HTML5 attributes (`required`, `type="email"`) — there are no JavaScript checks or custom messages yet. |
-| **JavaScript behaviour**   | The brief says JavaScript must drive the client-side behaviour. Ours is 24 lines in `resources/js/app.js`. More belongs here: validation feedback, saving a favourite without a page reload, a star-rating control. |
+| **Client-side validation** | Done on `/register` only. `resources/js/register.validation.js` checks the name, email, password length and confirmation on submit and unhides the error paragraphs in `auth/register.blade.php`; the form carries `novalidate`, so JavaScript has replaced the browser's own messages there. Missing: the same treatment on `/login`, feedback before submit (on `blur` or `input`), and `aria-invalid` / `aria-describedby` so the messages reach a screen reader. |
+| **JavaScript behaviour**   | The brief says JavaScript must drive the client-side behaviour. We have two files: `resources/js/app.js` (24 lines — the sort menu and keeping empty fields out of the search URL) and `resources/js/register.validation.js` (55 lines — the registration checks above). Still to come: saving a favourite without a page reload, and a star-rating control. |
 | Password reset             | Not built. The brief does not require it; our proposal mentions it. Decide as a group whether it is in scope.                                                                             |
 
 #### Quality attributes
 
 | Work                    | Where it stands                                                                                                                                                                                                    |
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Accessibility**       | Started, not audited. Every page has exactly one `<h1>`, a `<main>` landmark, labelled controls, alt text on every image and a sensible heading order; pages with navigation also have a skip link, and the filter groups use `<fieldset>`/`<legend>` inside a `role="search"` form. Still to do: a keyboard-only pass, a screen-reader pass, a colour-contrast check, and a Lighthouse or axe run. |
+| **Accessibility**       | Started, not audited. Every page has exactly one `<h1>`, a `<main>` landmark, labelled controls, alt text on every image and a sensible heading order; pages with navigation also have a skip link, and the filter groups use `<fieldset>`/`<legend>` inside a `role="search"` form. Still to do: a keyboard-only pass, a screen-reader pass, a colour-contrast check, and a Lighthouse or axe run. One known regression: the registration page's JavaScript error paragraphs are plain `<p>`s with no `aria-describedby` or live region, so nothing announces them. |
 | **Responsive layout**   | Built with Tailwind and checked at desktop and narrow widths. Not yet checked on real devices, or in Chrome's device emulation.                                                                                     |
 | **Target environment**  | We develop against `php artisan serve`. The brief specifies Apache via XAMPP on Windows, assessed in Chrome. Somebody needs to run the app that way and confirm it behaves, well before submission.                 |
 
