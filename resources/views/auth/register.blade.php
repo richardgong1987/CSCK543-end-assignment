@@ -112,4 +112,4 @@
         </p>
     </section>
 </x-layouts.app>
-@vite(['resources/js/register.validation.js'])
+
