@@ -30,6 +30,7 @@ class RecipeController extends Controller
             'dietaryTags' => DietaryTag::orderBy('name')->get(),
             'cuisines' => Cuisine::orderBy('name')->get(),
             'ingredientNames' => Ingredient::orderBy('name')->pluck('name'),
+
         ]);
     }
 
@@ -47,6 +48,9 @@ class RecipeController extends Controller
             'steps',
         ]);
 
+        $isFavourite = auth()->check()
+            && auth()->user()->favouriteRecipes()->whereKey($recipe->id)->exists();
+
         return view('recipes.show', [
             'recipe' => $recipe,
             // Lines that sit outside any named section, in their own listed order.
@@ -56,6 +60,7 @@ class RecipeController extends Controller
                 ->get(),
             'averageRating' => $recipe->ratings()->avg('overall'),
             'ratingCount' => $recipe->ratings()->count(),
+            'isFavourite' => $isFavourite,
         ]);
     }
 }
