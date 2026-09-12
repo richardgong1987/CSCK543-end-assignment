@@ -13,6 +13,29 @@
 
             <p class="mb-4 text-[#706f6c] dark:text-[#A1A09A]">{{ $recipe->description }}</p>
 
+            @auth
+                @if ($isFavourite)
+                    <form method="POST" action="{{ route('recipes.favourite.destroy', $recipe) }}">
+                        @csrf
+                        @method('DELETE')
+
+                        <button type="submit"
+                            class="mb-4 rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100">
+                            Remove favourite
+                        </button>
+                    </form>
+                @else
+                    <form method="POST" action="{{ route('recipes.favourite.store', $recipe) }}">
+                        @csrf
+
+                        <button type="submit"
+                            class="mb-4 rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100">
+                            Save favourite
+                        </button>
+                    </form>
+                @endif
+            @endauth
+
             @if ($recipe->categories->isNotEmpty() || $recipe->dietaryTags->isNotEmpty())
                 <ul class="flex flex-wrap gap-2" aria-label="Categories and dietary information">
                     @foreach ($recipe->categories as $category)
@@ -31,16 +54,12 @@
         </header>
 
         @if ($recipe->image_path)
-            <img
-                src="{{ asset($recipe->image_path) }}"
-                alt="{{ $recipe->title }}"
-                width="832"
-                height="468"
-                class="mb-8 aspect-video w-full rounded-lg object-cover"
-            >
+            <img src="{{ asset($recipe->image_path) }}" alt="{{ $recipe->title }}" width="832" height="468"
+                class="mb-8 aspect-video w-full rounded-lg object-cover">
         @endif
 
-        <dl class="mb-10 grid grid-cols-2 gap-4 rounded-lg bg-white p-5 text-sm shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] sm:grid-cols-3 dark:bg-[#161615] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]">
+        <dl
+            class="mb-10 grid grid-cols-2 gap-4 rounded-lg bg-white p-5 text-sm shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] sm:grid-cols-3 dark:bg-[#161615] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]">
             <div>
                 <dt class="text-[#706f6c] dark:text-[#A1A09A]">Preparation time</dt>
                 <dd>{{ $recipe->prepTimeBand->name }}</dd>
@@ -113,7 +132,8 @@
                 <h2 id="method-heading" class="mb-1 text-lg font-medium">Method</h2>
 
                 <p class="mb-4 text-sm text-[#706f6c] dark:text-[#A1A09A]">
-                    {{ $recipe->steps->count() }} steps, about {{ Duration::format($recipe->totalStepMinutes()) }} in total
+                    {{ $recipe->steps->count() }} steps, about {{ Duration::format($recipe->totalStepMinutes()) }} in
+                    total
                 </p>
 
                 <ol class="space-y-5">
@@ -121,8 +141,7 @@
                         <li class="flex gap-4">
                             <span
                                 class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#f3f3f1] text-sm dark:bg-[#252523]"
-                                aria-hidden="true"
-                            >
+                                aria-hidden="true">
                                 {{ $step->step_number }}
                             </span>
 
@@ -140,7 +159,8 @@
         </div>
 
         @if ($recipe->tips)
-            <section aria-labelledby="tips-heading" class="mt-10 rounded-lg bg-white p-5 shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:bg-[#161615] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]">
+            <section aria-labelledby="tips-heading"
+                class="mt-10 rounded-lg bg-white p-5 shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:bg-[#161615] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]">
                 <h2 id="tips-heading" class="mb-2 text-lg font-medium">Recipe tips</h2>
 
                 <p class="text-sm text-[#706f6c] dark:text-[#A1A09A]">{{ $recipe->tips }}</p>
@@ -148,7 +168,8 @@
         @endif
 
         @if ($recipe->source_url)
-            <footer class="mt-10 border-t border-[#e3e3e0] pt-5 text-sm text-[#706f6c] dark:border-[#3E3E3A] dark:text-[#A1A09A]">
+            <footer
+                class="mt-10 border-t border-[#e3e3e0] pt-5 text-sm text-[#706f6c] dark:border-[#3E3E3A] dark:text-[#A1A09A]">
                 <p>
                     Recipe and photograph &copy; BBC Food, reproduced for coursework purposes.
                     <a href="{{ $recipe->source_url }}" rel="noopener" class="underline underline-offset-4">
