@@ -6,7 +6,7 @@
 document.addEventListener('DOMContentLoaded', function (){
     const loginForm = document.getElementById('loginForm');
 
-    // Only run if the login form exists on this page 
+    // Only run if the login form exists on this page
     if (!loginForm) return;
 
     const emailInput = document.getElementById('email');
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function (){
     const passwordError = document.getElementById('loginPasswordError');
 
     //Find all server-side error messages (laravel errors)
-    const serverErrors = document.querySelectorAll('.server-error');
+    const serverErrors = document.querySelectorAll('.text-red-600');
 
     function hideLoginErrors (){
         emailError.classList.add('hidden');
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function (){
         hideLoginErrors();
         let hasError = false;
 
-        // Email: must be valid format 
+        // Email: must be valid format
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!emailPattern.test(emailInput.value.trim())){
             emailError.classList.remove('hidden');
