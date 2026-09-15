@@ -74,6 +74,10 @@
                 Remember me
             </label>
 
+            <a href="{{ route('password.request') }}" class="self-start text-sm underline underline-offset-4">
+                Forgot your password?
+            </a>
+
             <x-primary-button class="w-full">Log in</x-primary-button>
         </form>
 

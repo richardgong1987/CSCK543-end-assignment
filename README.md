@@ -204,6 +204,10 @@ follow the controller.
 | `PATCH /account`                   | signed in        | `AccountController@update` — change name and email              |
 | `PUT /account/password`            | signed in        | `AccountPasswordController@update` — change the password        |
 | `DELETE /account`                  | signed in        | `AccountController@destroy` — delete the account                |
+| `/forgot-password`                 | guests           | `Auth\PasswordResetLinkController@create` — ask for a reset link |
+| `POST /forgot-password`            | guests           | `Auth\PasswordResetLinkController@store` — email the link       |
+| `/reset-password/{token}`          | guests           | `Auth\NewPasswordController@create` — the page the link opens   |
+| `POST /reset-password`             | guests           | `Auth\NewPasswordController@store` — set the new password       |
 
 ### Layout and navigation
 
@@ -314,6 +318,31 @@ Five failed attempts a minute, keyed on the email **and** the IP address, lock f
 attempts out — see `LoginRequest::MAX_ATTEMPTS`. The throttle counter is kept in the
 cache, which is why the `cache` table matters (`CACHE_STORE=database`).
 
+### Password reset — `/forgot-password`, `/reset-password/{token}`
+
+| File                                                        | What it does                                              |
+| ----------------------------------------------------------- | ----------------------------------------------------------- |
+| `app/Http/Controllers/Auth/PasswordResetLinkController.php`  | Shows the "Forgot your password?" form and emails a reset link through Laravel's password broker. |
+| `app/Http/Controllers/Auth/NewPasswordController.php`        | Shows the form the link opens and sets the new password if the token matches the email address. |
+| `resources/views/auth/forgot-password.blade.php`             | The email address field. Linked from the login page.        |
+| `resources/views/auth/reset-password.blade.php`              | Email (filled in from the link), new password and confirmation. |
+
+**Where the email goes in development:** `.env` sets `MAIL_MAILER=log`, so no email is
+sent. The whole message, reset link included, is written to `storage/logs/laravel.log`;
+copy the link from there into the browser. Set a real mailer in `.env` to send them.
+
+Things to know before changing these:
+
+- **Neither form reveals who has an account.** Asking for a link gives the same reply
+  whether or not the address is registered, and a bad, used or expired token gets the
+  same message as an unknown address. Laravel's default messages would tell a stranger
+  which addresses are registered, which is why the controllers replace them.
+- **A link works once, for 60 minutes**, and the broker sends at most one link per
+  address a minute (`config/auth.php`, `passwords.users`). Both routes that accept a
+  submission are also limited to six requests a minute per IP.
+- **Resetting signs out "Remember me" logins elsewhere**, by replacing the user's
+  remember token. The new password follows the same rules as registration.
+
 ### Account page — `/dashboard`
 
 | File                                          | What it does                                                                 |
@@ -353,10 +382,11 @@ its form is on the page and otherwise does nothing.
 | File                                                    | What it does                                                        |
 | ------------------------------------------------------- | -------------------------------------------------------------------- |
 | `resources/js/app.js`                                   | The entry point. Also applies the sort menu as soon as it changes and keeps empty fields out of the search URL. |
-| `resources/js/common.js`                                | `setupFormValidation()`, shared by login and registration. A field is checked when the user leaves it, but only once they have typed in it, so tabbing through an empty form stays quiet. While a message is showing, it is re-checked on every keystroke and clears the moment the value is fixed; all visible messages are re-checked, because one rule can depend on another field (correcting the password can fix the confirmation). On submit every field is checked and focus moves to the first invalid one. Each message is linked to its field with `aria-describedby` and `aria-invalid` only while it shows, and the server's messages from the previous submission are hidden and unlinked once the user starts typing. |
+| `resources/js/common.js`                                | `setupFormValidation()`, shared by login and registration. A field is checked when the user leaves it, but only once they have typed in it, so tabbing through an empty form stays quiet. While a message is showing, it is re-checked on every keystroke and clears the moment the value is fixed; all visible messages are re-checked, because one rule can depend on another field (correcting the password can fix the confirmation). On submit every field is checked and focus moves to the first invalid one. Each message is linked to its field with `aria-describedby` and `aria-invalid` only while it shows, and the server's messages from the previous submission are hidden and unlinked once the user starts typing. A blur caused by pressing a button is not checked: the message it showed would push the button out from under the pointer and the click would be lost, and the submit check covers that field anyway. |
 | `resources/js/register.validation.js`                   | Registration's fields and rules: a name, a well-formed email, a password of at least 8 characters (matching `Password::defaults()`) and a matching confirmation. |
 | `resources/js/login.validation.js`                      | Login's fields and rules: a well-formed email and a non-empty password. |
 | `resources/js/account.validation.js`                    | The account settings page's three forms: a name and well-formed email; the current password, a new one of at least 8 characters and a matching confirmation; and a password to confirm deletion. The 8-character minimum is `MIN_PASSWORD_LENGTH` in `common.js`, shared with registration. |
+| `resources/js/password-reset.validation.js`             | The forgot password form (a well-formed email) and the reset form (a well-formed email, a new password of at least 8 characters and a matching confirmation). |
 | `resources/js/favourite-toggle.js`                      | Sends the Save/Remove favourite form with `fetch()` and flips the button in place, announcing the result to screen readers. Any failure, such as a network error or an expired session, falls back to a normal submit. |
 | `resources/js/star-rating.js`                           | Shows the rating form's 1–5 radio buttons as stars, with a hover preview. The radios stay underneath, visually hidden, so keyboards, screen readers and submission behave as without JavaScript. |
 
@@ -405,6 +435,7 @@ account settings page does.
 | `tests/Feature/RatingTest.php`             | Rating and re-rating a recipe, score validation, the form     |
 | `tests/Feature/DashboardTest.php`          | The account page: details, saved recipes, the user's ratings  |
 | `tests/Feature/AccountTest.php`            | Account settings: details, password change, deleting the account, error bags |
+| `tests/Feature/Auth/PasswordResetTest.php` | Reset links, the identical reply for unknown addresses, rate limiting, used, expired and mismatched tokens |
 | `tests/Feature/HomePageTest.php`           | The home page and its links                                   |
 | `tests/Feature/RecipeSchemaTest.php`       | Relationships, constraints and cascading deletes              |
 | `tests/Unit/DurationTest.php`, `tests/Unit/IngredientLineTest.php` | Time and ingredient formatting        |
@@ -417,15 +448,15 @@ says what already exists, so nobody redoes work that is done.
 
 #### Features the brief asks for
 
-| Work                       | Where it stands                                                                                                                                                                          |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Password reset             | Not built. The brief does not require it; our proposal mentions it. Decide as a group whether it is in scope.                                                                             |
+None outstanding. Every feature the brief asks for is built, along with the account
+settings and password reset our proposal mentions; see
+[What is built, and where](#what-is-built-and-where).
 
 #### Quality attributes
 
 | Work                    | Where it stands                                                                                                                                                                                                    |
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Accessibility**       | Automated checks done; a human screen-reader pass is still to do. Every page has exactly one `<h1>`, a `<main>` landmark, labelled controls, alt text on every image and a sensible heading order; pages with navigation also have a skip link, and the filter groups use `<fieldset>`/`<legend>` inside a `role="search"` form. Form errors, from JavaScript and from the server, are tied to their field with `aria-describedby` and `aria-invalid`, and a failed submit moves focus to the first invalid field. **Checked on 15 September 2026** in Chrome with axe-core 4.13 (WCAG 2.0, 2.1 and 2.2 A/AA plus best practices), in light and dark mode: no violations on the home page, the recipe listing, a recipe page (as a guest and logged in, with the rating form), login, registration (including the client-side and server-side error states), the account page and the account settings page (including a server error on the delete form). A scripted keyboard pass over the same pages reached every control with Tab and found a visible focus change on each. Colour contrast was measured for the whole palette and fixed where it fell short: accent-red text darkened from `#f53003` to `#d32903` (3.9:1 → 5.1:1), the JavaScript error text given a dark-mode colour, input and select borders raised to 3:1 (`#91918f` light, `#676763` dark, for WCAG 1.4.11), and placeholders to `#767570`. The audit was a one-off script, not yet in the repository; it belongs with the end-to-end tests. Still to do: a screen-reader pass (VoiceOver or NVDA) and a person completing a keyboard-only journey, since a script cannot judge whether the focus order and announcements make sense. |
+| **Accessibility**       | Automated checks done; a human screen-reader pass is still to do. Every page has exactly one `<h1>`, a `<main>` landmark, labelled controls, alt text on every image and a sensible heading order; pages with navigation also have a skip link, and the filter groups use `<fieldset>`/`<legend>` inside a `role="search"` form. Form errors, from JavaScript and from the server, are tied to their field with `aria-describedby` and `aria-invalid`, and a failed submit moves focus to the first invalid field. **Checked on 15 September 2026** in Chrome with axe-core 4.13 (WCAG 2.0, 2.1 and 2.2 A/AA plus best practices), in light and dark mode: no violations on the home page, the recipe listing, a recipe page (as a guest and logged in, with the rating form), login, registration (including the client-side and server-side error states), the account page, the account settings page (including a server error on the delete form), and the forgot password and reset password pages (including their status message and a refused token). A scripted keyboard pass over the same pages reached every control with Tab and found a visible focus change on each. Colour contrast was measured for the whole palette and fixed where it fell short: accent-red text darkened from `#f53003` to `#d32903` (3.9:1 → 5.1:1), the JavaScript error text given a dark-mode colour, input and select borders raised to 3:1 (`#91918f` light, `#676763` dark, for WCAG 1.4.11), and placeholders to `#767570`. The audit was a one-off script, not yet in the repository; it belongs with the end-to-end tests. Still to do: a screen-reader pass (VoiceOver or NVDA) and a person completing a keyboard-only journey, since a script cannot judge whether the focus order and announcements make sense. |
 | **Responsive layout**   | Built with Tailwind and checked at desktop and narrow widths. Not yet checked on real devices, or in Chrome's device emulation.                                                                                     |
 | **Target environment**  | We develop against `php artisan serve`. The brief specifies Apache via XAMPP on Windows, assessed in Chrome. Somebody needs to run the app that way and confirm it behaves, well before submission.                 |
 
@@ -433,7 +464,7 @@ says what already exists, so nobody redoes work that is done.
 
 | Work                          | Where it stands                                                                                                     |
 | ----------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Unit and feature tests        | 149 tests covering the schema, authentication, search, sorting, favourites, ratings, the account page, account settings and the other pages. Extend these as features land.          |
+| Unit and feature tests        | 166 tests covering the schema, authentication, password reset, search, sorting, favourites, ratings, the account page, account settings and the other pages. Extend these as features land.          |
 | **End-to-end tests**          | None. §7.1 asks for Playwright or Dusk covering register → log in → search → open a recipe → save a favourite → log out, including a keyboard-only journey. |
 | **Performance testing**       | None. §7.2 asks for Lighthouse, page weight, query counts and N+1 checks.                                            |
 | **Load and stress testing**   | None, and only relevant if the JSON endpoint below gets built. §7.3 describes the k6 runs and the figures to record. |
@@ -444,7 +475,7 @@ says what already exists, so nobody redoes work that is done.
 | Work                          | Where it stands                                                                                                                                          |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Injection, XSS, CSRF          | Handled: queries go through Eloquent, the sort key is allow-listed, Blade escapes output, and every state-changing form carries `@csrf`.                  |
-| Login throttling              | Handled: five attempts a minute per email and IP.                                                                                                        |
+| Login throttling              | Handled: five attempts a minute per email and IP. Password reset requests and submissions are limited to six a minute per IP, and the broker sends at most one link per address a minute.                                                                                                        |
 | **Security headers and CSP**  | Not done (§8.2).                                                                                                                                         |
 | **Production configuration**  | Not done (§8.3, §8.5): HTTPS, `Secure`/`HttpOnly`/`SameSite` cookies, `APP_DEBUG=false`, least-privilege database credentials.                            |
 | **Dependency audit**          | Not run (§8.5): `composer audit` and `pnpm audit`.                                                                                                       |

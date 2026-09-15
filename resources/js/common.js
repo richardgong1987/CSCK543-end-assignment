@@ -48,6 +48,22 @@ export function setupFormValidation({ formId, fields, serverErrorSelector = '.se
 
     const isShowingError = (check) => !check.error.classList.contains('hidden');
 
+    // Showing a message pushes the submit button down. Pressing the button blurs the field
+    // first, so a message shown on that blur would slide the button out from under the
+    // pointer and the click would be lost. A press on a button skips the blur check; the
+    // submit check runs straight after and covers every field anyway.
+    let isPressingButton = false;
+
+    form.addEventListener('pointerdown', (event) => {
+        isPressingButton = event.target.closest('button') !== null;
+    });
+    document.addEventListener('pointerup', () => {
+        isPressingButton = false;
+    });
+    document.addEventListener('pointercancel', () => {
+        isPressingButton = false;
+    });
+
     checks.forEach((check) => {
         check.input.addEventListener('input', () => {
             editedInputs.add(check.input);
@@ -60,7 +76,7 @@ export function setupFormValidation({ formId, fields, serverErrorSelector = '.se
 
         // Only a field the user has typed in, so tabbing through an empty form stays quiet.
         check.input.addEventListener('blur', () => {
-            if (editedInputs.has(check.input)) {
+            if (editedInputs.has(check.input) && !isPressingButton) {
                 showCheckResult(check);
             }
         });

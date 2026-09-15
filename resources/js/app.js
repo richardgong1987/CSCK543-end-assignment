@@ -1,6 +1,7 @@
 import './register.validation.js';
 import './login.validation.js';
 import './account.validation.js';
+import './password-reset.validation.js';
 import './favourite-toggle.js';
 import './star-rating.js';
 /**
