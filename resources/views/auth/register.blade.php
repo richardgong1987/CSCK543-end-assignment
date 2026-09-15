@@ -40,7 +40,7 @@
                 {{--JavaScript error message (hidden) --}}
                 <p class="text-sm text-red-600 hidden" id="nameError" > Please enter your name</p>
                 {{-- Server-side error message --}}
-                <x-input-error field="name" />
+                <x-input-error field="name" class="server-error" />
             </div>
 
             <div class="grid gap-2">
@@ -60,7 +60,7 @@
                 <p class="text-sm text-red-600 hidden" id="emailError">Please enter a valid email</p>
 
                 {{-- Server-side error message--}}
-                <x-input-error field="email" />
+                <x-input-error field="email" class="server-error" />
             </div>
 
             <div class="grid gap-2">
@@ -79,7 +79,7 @@
                     Password must be at least 8 characters.
                 </p>
                 {{-- Server-side error message --}}
-                <x-input-error field="password" />
+                <x-input-error field="password" class="server-error" />
             </div>
 
             <div class="grid gap-2">
@@ -98,7 +98,7 @@
                     Passwords do not match.
                 </p>
                 {{-- Server-side error message --}}
-                <x-input-error field="password_confirmation" />
+                <x-input-error field="password_confirmation" class="server-error" />
             </div>
 
             <x-primary-button class="w-full">Create account</x-primary-button>
