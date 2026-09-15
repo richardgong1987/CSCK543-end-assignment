@@ -293,6 +293,10 @@ Validation lives in the controller's `store()`: the name is required, the email 
 be well formed and unused, and the password must meet `Password::defaults()` and be
 confirmed. Passwords are hashed by the `hashed` cast on `App\Models\User`.
 
+The client-side checks mirror these rules so the two cannot disagree: the name and email
+fields carry `maxlength="255"` to match the server's `max:255`, and the 8-character
+password minimum matches `Password::defaults()`. Change both sides together.
+
 ### Login and logout — `/login`, `POST /logout`
 
 | File                                                        | What it does                                              |
@@ -326,7 +330,7 @@ its form is on the page and otherwise does nothing.
 | File                                                    | What it does                                                        |
 | ------------------------------------------------------- | -------------------------------------------------------------------- |
 | `resources/js/app.js`                                   | The entry point. Also applies the sort menu as soon as it changes and keeps empty fields out of the search URL. |
-| `resources/js/common.js`                                | `setupFormValidation()`, shared by login and registration: checks each field on submit, shows its message and links it to the field with `aria-describedby` and `aria-invalid`, moves focus to the first invalid field, and hides the server's messages from the previous submission once the user starts typing. |
+| `resources/js/common.js`                                | `setupFormValidation()`, shared by login and registration. A field is checked when the user leaves it, but only once they have typed in it, so tabbing through an empty form stays quiet. While a message is showing, it is re-checked on every keystroke and clears the moment the value is fixed; all visible messages are re-checked, because one rule can depend on another field (correcting the password can fix the confirmation). On submit every field is checked and focus moves to the first invalid one. Each message is linked to its field with `aria-describedby` and `aria-invalid` only while it shows, and the server's messages from the previous submission are hidden and unlinked once the user starts typing. |
 | `resources/js/register.validation.js`                   | Registration's fields and rules: a name, a well-formed email, a password of at least 8 characters (matching `Password::defaults()`) and a matching confirmation. |
 | `resources/js/login.validation.js`                      | Login's fields and rules: a well-formed email and a non-empty password. |
 | `resources/js/favourite-toggle.js`                      | Sends the Save/Remove favourite form with `fetch()` and flips the button in place, announcing the result to screen readers. Any failure, such as a network error or an expired session, falls back to a normal submit. |
@@ -388,7 +392,6 @@ says what already exists, so nobody redoes work that is done.
 
 | Work                       | Where it stands                                                                                                                                                                          |
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Client-side validation** | Built for `/register` and `/login`; see [JavaScript](#javascript). Missing: feedback before submit, on `blur` or `input`, rather than only when the form is sent. |
 | Account management         | Not built: editing a name or email, changing the password, deleting the account. The brief does not require them; deleting accounts would also answer §9's question of how test accounts get deleted. Decide as a group whether they are in scope. |
 | Password reset             | Not built. The brief does not require it; our proposal mentions it. Decide as a group whether it is in scope.                                                                             |
 

@@ -4,6 +4,9 @@
  * These only save a round trip; the server rules remain the real guard, which is
  * why the forms keep `novalidate` and still render Laravel's own messages.
  *
+ * A field is checked when the user leaves it, re-checked as they type while its
+ * message is showing, and every field is checked on submit.
+ *
  * @param {object} options
  * @param {string} options.formId
  * @param {{ inputId: string, errorId: string, isValid: (value: string, form: HTMLFormElement) => boolean }[]} options.fields
@@ -21,6 +24,8 @@ export function setupFormValidation({ formId, fields, serverErrorSelector = '.se
         isValid,
     }));
 
+    const editedInputs = new Set();
+
     // A server message describes the last submission, so it is stale once the user edits.
     const hideServerErrors = () => {
         form.querySelectorAll(serverErrorSelector).forEach((message) => {
@@ -32,17 +37,37 @@ export function setupFormValidation({ formId, fields, serverErrorSelector = '.se
         });
     };
 
-    checks.forEach(({ input }) => input.addEventListener('input', hideServerErrors));
+    const showCheckResult = (check) => {
+        const hasFailed = !check.isValid(check.input.value, form);
+
+        check.error.classList.toggle('hidden', !hasFailed);
+        linkErrorMessage(check.input, check.error.id, hasFailed);
+
+        return hasFailed;
+    };
+
+    const isShowingError = (check) => !check.error.classList.contains('hidden');
+
+    checks.forEach((check) => {
+        check.input.addEventListener('input', () => {
+            editedInputs.add(check.input);
+            hideServerErrors();
+
+            // Every visible message is re-checked, not just this field's, because one rule can
+            // depend on another field: fixing the password can fix its confirmation too.
+            checks.filter(isShowingError).forEach(showCheckResult);
+        });
+
+        // Only a field the user has typed in, so tabbing through an empty form stays quiet.
+        check.input.addEventListener('blur', () => {
+            if (editedInputs.has(check.input)) {
+                showCheckResult(check);
+            }
+        });
+    });
 
     form.addEventListener('submit', (event) => {
-        const failedChecks = checks.filter(({ input, isValid }) => !isValid(input.value, form));
-
-        checks.forEach((check) => {
-            const hasFailed = failedChecks.includes(check);
-
-            check.error.classList.toggle('hidden', !hasFailed);
-            linkErrorMessage(check.input, check.error.id, hasFailed);
-        });
+        const failedChecks = checks.filter(showCheckResult);
 
         if (failedChecks.length > 0) {
             event.preventDefault();

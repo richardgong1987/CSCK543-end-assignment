@@ -35,6 +35,7 @@
                     placeholder="Full name"
                     autocomplete="name"
                     required
+                    maxlength="255"
                     autofocus
                     :aria-invalid="$errors->has('name') ? 'true' : null"
                     :aria-describedby="$errors->has('name') ? 'name-error' : null"
@@ -56,6 +57,7 @@
                     placeholder="email@example.com"
                     autocomplete="email"
                     required
+                    maxlength="255"
                     :aria-invalid="$errors->has('email') ? 'true' : null"
                     :aria-describedby="$errors->has('email') ? 'email-error' : null"
                 />
