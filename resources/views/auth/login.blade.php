@@ -35,13 +35,13 @@
                     autocomplete="email"
                     required
                     autofocus
+                    :aria-invalid="$errors->has('email') ? 'true' : null"
+                    :aria-describedby="$errors->has('email') ? 'email-error' : null"
                 />
-                <p class="text-sm text-red-600 hidden" id="loginEmailError">
+                <p class="text-sm text-[#d32903] dark:text-[#FF4433] hidden" id="loginEmailError">
                     Please enter a valid email address. 
                 </p>
-                @error('email')
-                    <p class="text-sm text-red-600 mt-1 server-error">{{ $message }}</p>
-                @enderror
+                <x-input-error field="email" class="server-error" />
             </div>
             {{-- PASSWORD ---}}
             <div class="grid gap-2">
@@ -54,14 +54,14 @@
                     placeholder="Password"
                     autocomplete="current-password"
                     required
+                    :aria-invalid="$errors->has('password') ? 'true' : null"
+                    :aria-describedby="$errors->has('password') ? 'password-error' : null"
                 />
-                <p class="text-sm text-red-600 hidden" id="loginPasswordError">
-                    please enter your password.
+                <p class="text-sm text-[#d32903] dark:text-[#FF4433] hidden" id="loginPasswordError">
+                    Please enter your password.
                 </p>
 
-                @error('password')
-                    <p class="text-sm text-red-600 mt-1 server-error">{{ $message }}</p>
-                @enderror
+                <x-input-error field="password" class="server-error" />
             </div>
             {{-- REMEMBER ME ---}}
             <label for="remember" class="flex items-center gap-3 text-sm">
@@ -79,7 +79,7 @@
 
         <p class="text-center text-sm text-[#706f6c] dark:text-[#A1A09A]">
             Don't have an account?
-            <a href="{{ route('register') }}" class="font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433]">
+            <a href="{{ route('register') }}" class="font-medium underline underline-offset-4 text-[#d32903] dark:text-[#FF4433]">
                 Sign up
             </a>
         </p>

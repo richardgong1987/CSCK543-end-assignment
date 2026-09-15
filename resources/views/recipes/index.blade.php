@@ -38,7 +38,7 @@
                     Nothing here matches every filter you chose. Try removing one, or
                     <a
                         href="{{ route('recipes.index') }}"
-                        class="underline underline-offset-4 text-[#f53003] dark:text-[#FF4433]"
+                        class="underline underline-offset-4 text-[#d32903] dark:text-[#FF4433]"
                     >start again</a>.
                 </p>
             @else

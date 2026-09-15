@@ -200,7 +200,7 @@
                             $currentScore = (string) old($field, $userRating?->{$field});
                         @endphp
 
-                        <fieldset aria-describedby="{{ $field }}-scale">
+                        <fieldset aria-describedby="{{ $field }}-scale @error($field) {{ $field }}-error @enderror">
                             <legend class="text-sm font-medium">
                                 {{ $question['label'] }}
                                 <span class="font-normal text-[#706f6c] dark:text-[#A1A09A]">({{ $isRequired ? 'required' : 'optional' }})</span>

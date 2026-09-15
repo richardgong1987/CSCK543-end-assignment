@@ -36,9 +36,11 @@
                     autocomplete="name"
                     required
                     autofocus
+                    :aria-invalid="$errors->has('name') ? 'true' : null"
+                    :aria-describedby="$errors->has('name') ? 'name-error' : null"
                 />
                 {{--JavaScript error message (hidden) --}}
-                <p class="text-sm text-red-600 hidden" id="nameError" > Please enter your name</p>
+                <p class="text-sm text-[#d32903] dark:text-[#FF4433] hidden" id="nameError" > Please enter your name</p>
                 {{-- Server-side error message --}}
                 <x-input-error field="name" class="server-error" />
             </div>
@@ -54,10 +56,11 @@
                     placeholder="email@example.com"
                     autocomplete="email"
                     required
-                    autofocus
+                    :aria-invalid="$errors->has('email') ? 'true' : null"
+                    :aria-describedby="$errors->has('email') ? 'email-error' : null"
                 />
                 {{-- JavaScript Error Message --}}
-                <p class="text-sm text-red-600 hidden" id="emailError">Please enter a valid email</p>
+                <p class="text-sm text-[#d32903] dark:text-[#FF4433] hidden" id="emailError">Please enter a valid email</p>
 
                 {{-- Server-side error message--}}
                 <x-input-error field="email" class="server-error" />
@@ -73,9 +76,11 @@
                     placeholder="Password"
                     autocomplete="new-password"
                     required
+                    :aria-invalid="$errors->has('password') ? 'true' : null"
+                    :aria-describedby="$errors->has('password') ? 'password-error' : null"
                 />
                 {{-- JavaScript error message --}}
-                <p class="text-sm text-red-600 hidden" id="passwordError">
+                <p class="text-sm text-[#d32903] dark:text-[#FF4433] hidden" id="passwordError">
                     Password must be at least 8 characters.
                 </p>
                 {{-- Server-side error message --}}
@@ -92,9 +97,11 @@
                     placeholder="Confirm password"
                     autocomplete="new-password"
                     required
+                    :aria-invalid="$errors->has('password_confirmation') ? 'true' : null"
+                    :aria-describedby="$errors->has('password_confirmation') ? 'password_confirmation-error' : null"
                 />
                 {{-- JavaScript error message --}}
-                <p class="text-sm text-red-600 hidden" id="confirmError">
+                <p class="text-sm text-[#d32903] dark:text-[#FF4433] hidden" id="confirmError">
                     Passwords do not match.
                 </p>
                 {{-- Server-side error message --}}
@@ -106,7 +113,7 @@
         {{-- Link to Login Page --}}
         <p class="text-center text-sm text-[#706f6c] dark:text-[#A1A09A]">
             Already have an account?
-            <a href="{{ route('login') }}" class="font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433]">
+            <a href="{{ route('login') }}" class="font-medium underline underline-offset-4 text-[#d32903] dark:text-[#FF4433]">
                 Log in
             </a>
         </p>

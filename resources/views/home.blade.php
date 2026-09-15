@@ -32,7 +32,7 @@
             Or
             <a
                 href="{{ route('recipes.index') }}"
-                class="underline underline-offset-4 text-[#f53003] dark:text-[#FF4433]"
+                class="underline underline-offset-4 text-[#d32903] dark:text-[#FF4433]"
             >browse all {{ $recipeCount }} recipes</a>.
         </p>
     </section>
@@ -130,7 +130,7 @@
             <p class="text-sm text-[#706f6c] dark:text-[#A1A09A]">
                 <a
                     href="{{ route('register') }}"
-                    class="underline underline-offset-4 text-[#f53003] dark:text-[#FF4433]"
+                    class="underline underline-offset-4 text-[#d32903] dark:text-[#FF4433]"
                 >Create an account</a>
                 to save recipes to your own list and rate the ones you have cooked. Browsing and
                 searching need no account at all.

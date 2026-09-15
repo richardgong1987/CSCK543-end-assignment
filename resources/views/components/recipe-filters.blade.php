@@ -169,7 +169,7 @@
             @if ($search->isFiltered())
                 <a
                     href="{{ route('recipes.index') }}"
-                    class="text-sm underline underline-offset-4 text-[#f53003] dark:text-[#FF4433]"
+                    class="text-sm underline underline-offset-4 text-[#d32903] dark:text-[#FF4433]"
                 >
                     Clear all filters
                 </a>
