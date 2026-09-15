@@ -30,6 +30,18 @@ test('a user cannot log in with an incorrect password', function () {
     $this->assertGuest();
 });
 
+test('login rejects invalid input before checking credentials', function (array $credentials, string $field, string $expectedMessage) {
+    $response = $this->post(route('login'), $credentials);
+
+    // A failed credential check also reports on "email", so match the rule's own message.
+    $response->assertInvalid([$field => $expectedMessage]);
+    $this->assertGuest();
+})->with([
+    'missing email' => [['email' => '', 'password' => 'password'], 'email', 'required'],
+    'malformed email' => [['email' => 'not-an-email', 'password' => 'password'], 'email', 'valid email'],
+    'missing password' => [['email' => 'ada@example.com', 'password' => ''], 'password', 'required'],
+]);
+
 test('login is throttled after five failed attempts', function () {
     $user = User::factory()->create();
 

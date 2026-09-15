@@ -61,6 +61,7 @@ class RecipeController extends Controller
             'averageRating' => $recipe->ratings()->avg('overall'),
             'ratingCount' => $recipe->ratings()->count(),
             'isFavourite' => $isFavourite,
+            'userRating' => auth()->user()?->ratings()->firstWhere('recipe_id', $recipe->id),
         ]);
     }
 }

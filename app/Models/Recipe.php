@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -73,6 +75,19 @@ class Recipe extends Model
     public function favouritedBy(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'favourites')->withTimestamps();
+    }
+
+    /**
+     * Everything the recipe card component reads, loaded up front so a page of cards
+     * does not query once per card. Every listing that renders cards must use this,
+     * or the cards lose their details the moment one of them changes.
+     */
+    #[Scope]
+    protected function withCardDetails(Builder $query): void
+    {
+        $query->with(['categories', 'dietaryTags', 'prepTimeBand', 'cookTimeBand'])
+            ->withAvg('ratings as average_rating', 'overall')
+            ->withCount('ratings');
     }
 
     /**

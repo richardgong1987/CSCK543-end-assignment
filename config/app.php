@@ -123,4 +123,17 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Vite Hot File
+    |--------------------------------------------------------------------------
+    |
+    | Leave unset. The end-to-end tests point it at a file that does not exist,
+    | so the pages they load use the built assets even while a developer's Vite
+    | dev server is running and has written public/hot.
+    |
+    */
+
+    'vite_hot_file' => env('VITE_HOT_FILE'),
+
 ];

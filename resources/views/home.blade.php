@@ -32,7 +32,7 @@
             Or
             <a
                 href="{{ route('recipes.index') }}"
-                class="underline underline-offset-4 text-[#f53003] dark:text-[#FF4433]"
+                class="underline underline-offset-4 text-[#d32903] dark:text-[#FF4433]"
             >browse all {{ $recipeCount }} recipes</a>.
         </p>
     </section>
@@ -41,8 +41,9 @@
         <img
             src="{{ asset('images/recipes/mushroom-doner.jpg')}}"
             alt="A colorful picture of delicious mushroom doner"
-            class="w-full rounded-lg object-cover shadow-md"
-            style="max-height: 320px;"
+            width="832"
+            height="468"
+            class="max-h-80 w-full rounded-lg object-cover shadow-md"
         >
     </section>
 
@@ -130,7 +131,7 @@
             <p class="text-sm text-[#706f6c] dark:text-[#A1A09A]">
                 <a
                     href="{{ route('register') }}"
-                    class="underline underline-offset-4 text-[#f53003] dark:text-[#FF4433]"
+                    class="underline underline-offset-4 text-[#d32903] dark:text-[#FF4433]"
                 >Create an account</a>
                 to save recipes to your own list and rate the ones you have cooked. Browsing and
                 searching need no account at all.

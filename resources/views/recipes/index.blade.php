@@ -38,7 +38,7 @@
                     Nothing here matches every filter you chose. Try removing one, or
                     <a
                         href="{{ route('recipes.index') }}"
-                        class="underline underline-offset-4 text-[#f53003] dark:text-[#FF4433]"
+                        class="underline underline-offset-4 text-[#d32903] dark:text-[#FF4433]"
                     >start again</a>.
                 </p>
             @else
@@ -48,7 +48,7 @@
             <ul role="list" class="grid gap-6 sm:grid-cols-2">
                 @foreach ($recipes as $recipe)
                     <li class="flex">
-                        <x-recipe-card :$recipe />
+                        <x-recipe-card :$recipe :prioritise-image="$loop->first" />
                     </li>
                 @endforeach
             </ul>

@@ -57,6 +57,29 @@ test('registration rejects a password that is not confirmed', function () {
     $this->assertGuest();
 });
 
+test('registration rejects invalid input', function (array $invalidInput, string $field, string $expectedMessage) {
+    $response = $this->post(route('register'), [
+        'name' => 'Ada Lovelace',
+        'email' => 'ada@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+        ...$invalidInput,
+    ]);
+
+    // Matching the message proves the intended rule fired, not just any rule on the field.
+    $response->assertInvalid([$field => $expectedMessage]);
+    $this->assertGuest();
+
+    expect(User::count())->toBe(0);
+})->with([
+    'missing name' => [['name' => ''], 'name', 'required'],
+    'name longer than 255 characters' => [['name' => str_repeat('a', 256)], 'name', 'greater than 255'],
+    'missing email' => [['email' => ''], 'email', 'required'],
+    'malformed email' => [['email' => 'not-an-email'], 'email', 'valid email'],
+    'missing password' => [['password' => '', 'password_confirmation' => ''], 'password', 'required'],
+    'password shorter than 8 characters' => [['password' => 'short12', 'password_confirmation' => 'short12'], 'password', 'at least 8'],
+]);
+
 test('logged in users are redirected away from registration', function () {
     $this->actingAs(User::factory()->create())
         ->get(route('register'))

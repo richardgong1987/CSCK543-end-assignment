@@ -1,0 +1,115 @@
+name: Tests
+
+on:
+  # Pull requests run once, on the pull_request event. Pushes run only for master, so a
+  # branch with an open pull request is not tested twice for every commit.
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  feature-tests:
+    name: Unit and feature tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --no-progress
+          pnpm install --frozen-lockfile
+
+      - name: Prepare the environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      # The pages under test render @vite and @fonts, which need the built manifest.
+      - name: Build assets
+        run: pnpm run build
+
+      - name: Run the tests
+        run: composer test
+
+  end-to-end-tests:
+    name: End-to-end tests (Chrome)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --no-progress
+          pnpm install --frozen-lockfile
+
+      - name: Prepare the environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Build assets
+        run: pnpm run build
+
+      # The tests run in the stable Chrome channel, the brief's target browser.
+      - name: Install Chrome
+        run: pnpm exec playwright install --with-deps chrome
+
+      - name: Run the end-to-end tests
+        run: pnpm run test:e2e
+
+      - name: Keep the report when a test fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
+
+  dependency-audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Check PHP dependencies for known vulnerabilities
+        run: composer audit --locked
+
+      - name: Check JavaScript dependencies for known vulnerabilities
+        run: pnpm audit

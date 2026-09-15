@@ -1,10 +1,14 @@
-@props(['title'])
+@props([
+    'title',
+    'description' => 'Search and sort recipes by ingredient, course, dietary need, cooking time and rating, and save the ones you like.',
+])
 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ $description }}">
 
     <title>{{ $title }} · {{ config('app.name') }}</title>
 
@@ -34,6 +38,8 @@
 
         <div class="flex items-center gap-4">
             @auth
+                <a href="{{ route('dashboard') }}" class="underline-offset-4 hover:underline">Your account</a>
+
                 <span class="text-[#706f6c] dark:text-[#A1A09A]">{{ auth()->user()->name }}</span>
 
                 <form method="POST" action="{{ route('logout') }}">
@@ -61,13 +67,23 @@
 </header>
 
 <main id="main-content" class="mx-auto max-w-4xl p-6 lg:p-8">
+    @if (session('status'))
+        {{-- role="status" lets a screen reader announce the result of the last action. --}}
+        <p role="status" class="mb-6 rounded-sm border border-[#19140035] px-4 py-3 text-sm dark:border-[#3E3E3A]">
+            {{ session('status') }}
+        </p>
+    @endif
+
     {{ $slot }}
 </main>
-<footer class="border-t border-[#e3e3e0] dark:;border-[#3E3E3A] mt-12">
+<footer class="border-t border-[#e3e3e0] dark:border-[#3E3E3A] mt-12">
     <div class="mx-auto max-w-4xl px-6 py-8 text-sm text-[#706f6c] dark:text-[#A1A09A]">
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <p>&copy;{{ date('Y') }} Recipe App. All rights reserved.</p>
-            <p>CSK543 Group Project &middot; University of Liverpool</p>
+            <p>
+                CSK543 Group Project &middot; University of Liverpool &middot;
+                <a href="{{ route('privacy') }}" class="underline underline-offset-4">Privacy notice</a>
+            </p>
         </div>
 
     </div>

@@ -1,6 +1,6 @@
 @use('App\Support\Duration')
 
-<x-layouts.app :title="$recipe->title">
+<x-layouts.app :title="$recipe->title" :description="Str::limit($recipe->description, 155)">
     <nav aria-label="Breadcrumb" class="mb-6 text-sm">
         <a href="{{ route('recipes.index') }}" class="underline-offset-4 hover:underline">
             &larr; All recipes
@@ -14,26 +14,30 @@
             <p class="mb-4 text-[#706f6c] dark:text-[#A1A09A]">{{ $recipe->description }}</p>
 
             @auth
-                @if ($isFavourite)
-                    <form method="POST" action="{{ route('recipes.favourite.destroy', $recipe) }}">
-                        @csrf
-                        @method('DELETE')
+                {{-- One form that flips between saving and removing. It submits normally without
+                     JavaScript; resources/js/favourite-toggle.js sends it in the background instead. --}}
+                <form method="POST"
+                    action="{{ $isFavourite ? route('recipes.favourite.destroy', $recipe) : route('recipes.favourite.store', $recipe) }}"
+                    data-favourite-form
+                    data-save-url="{{ route('recipes.favourite.store', $recipe) }}"
+                    data-remove-url="{{ route('recipes.favourite.destroy', $recipe) }}"
+                    class="mb-4 flex flex-wrap items-center gap-3">
+                    @csrf
+                    {{-- A disabled input is not submitted, so the request is a DELETE only while the recipe is saved. --}}
+                    <input type="hidden" name="_method" value="DELETE" @disabled(! $isFavourite)>
 
-                        <button type="submit"
-                            class="mb-4 rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100">
-                            Remove favourite
-                        </button>
-                    </form>
-                @else
-                    <form method="POST" action="{{ route('recipes.favourite.store', $recipe) }}">
-                        @csrf
+                    <button type="submit"
+                        class="cursor-pointer rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal hover:border-[#1915014a] aria-busy:cursor-wait aria-busy:opacity-60 dark:border-[#3E3E3A] dark:hover:border-[#62605b]">
+                        {{ $isFavourite ? 'Remove favourite' : 'Save favourite' }}
+                    </button>
 
-                        <button type="submit"
-                            class="mb-4 rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100">
-                            Save favourite
-                        </button>
-                    </form>
-                @endif
+                    <p role="status" data-favourite-status class="text-sm text-[#706f6c] dark:text-[#A1A09A]"></p>
+                </form>
+            @else
+                {{-- Without this, guests have no way to learn that recipes can be saved. --}}
+                <p class="mb-4 text-sm">
+                    <a href="{{ route('login') }}" class="underline underline-offset-4">Log in to save this recipe</a>
+                </p>
             @endauth
 
             @if ($recipe->categories->isNotEmpty() || $recipe->dietaryTags->isNotEmpty())
@@ -166,6 +170,81 @@
                 <p class="text-sm text-[#706f6c] dark:text-[#A1A09A]">{{ $recipe->tips }}</p>
             </section>
         @endif
+
+        <section aria-labelledby="rating-heading"
+            class="mt-10 rounded-lg bg-white p-5 shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:bg-[#161615] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]">
+            <h2 id="rating-heading" class="mb-4 text-lg font-medium">
+                {{ $userRating ? 'Your rating' : 'Rate this recipe' }}
+            </h2>
+
+            @auth
+                @php
+                    // Difficulty runs the other way from the rest: a high score means harder, not better.
+                    $ratingQuestions = [
+                        'overall' => ['label' => 'Overall', 'scale' => '1 = poor, 5 = excellent'],
+                        'taste' => ['label' => 'Taste', 'scale' => '1 = poor, 5 = excellent'],
+                        'difficulty' => ['label' => 'Difficulty', 'scale' => '1 = easy, 5 = hard'],
+                        'appearance' => ['label' => 'Appearance', 'scale' => '1 = poor, 5 = excellent'],
+                    ];
+
+                    $scoreOptionClasses = 'inline-flex min-w-10 justify-center rounded-sm border border-[#19140035] px-3 py-1.5 text-sm hover:border-[#1915014a] peer-checked:border-[#1b1b18] peer-checked:bg-[#1b1b18] peer-checked:text-white peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 dark:border-[#3E3E3A] dark:hover:border-[#62605b] dark:peer-checked:border-[#EDEDEC] dark:peer-checked:bg-[#EDEDEC] dark:peer-checked:text-[#1b1b18]';
+                @endphp
+
+                <form method="POST" action="{{ route('recipes.rating.update', $recipe) }}" class="grid gap-6">
+                    @csrf
+                    @method('PUT')
+
+                    @foreach ($ratingQuestions as $field => $question)
+                        @php
+                            $isRequired = $field === 'overall';
+                            $currentScore = (string) old($field, $userRating?->{$field});
+                        @endphp
+
+                        <fieldset aria-describedby="{{ $field }}-scale @error($field) {{ $field }}-error @enderror">
+                            <legend class="text-sm font-medium">
+                                {{ $question['label'] }}
+                                <span class="font-normal text-[#706f6c] dark:text-[#A1A09A]">({{ $isRequired ? 'required' : 'optional' }})</span>
+                            </legend>
+
+                            <p id="{{ $field }}-scale" class="mb-2 text-xs text-[#706f6c] dark:text-[#A1A09A]">
+                                {{ $question['scale'] }}
+                            </p>
+
+                            {{-- resources/js/star-rating.js turns the numbered options into stars. --}}
+                            <div class="flex flex-wrap items-center gap-2" data-star-rating>
+                                @unless ($isRequired)
+                                    {{-- A radio group cannot be cleared once chosen, so skipping needs an option of its own. --}}
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="{{ $field }}" value="" @checked($currentScore === '') class="peer sr-only">
+                                        <span class="{{ $scoreOptionClasses }}">Skip</span>
+                                    </label>
+                                @endunless
+
+                                @foreach (range(1, 5) as $score)
+                                    <label class="cursor-pointer" data-score="{{ $score }}">
+                                        <input type="radio" name="{{ $field }}" value="{{ $score }}" @checked($currentScore === (string) $score) @required($isRequired) class="peer sr-only">
+                                        <span class="{{ $scoreOptionClasses }}" data-score-face>{{ $score }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
+
+                            <x-input-error :field="$field" class="mt-2" />
+                        </fieldset>
+                    @endforeach
+
+                    <div>
+                        <button type="submit"
+                            class="cursor-pointer rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal hover:border-[#1915014a] dark:border-[#3E3E3A] dark:hover:border-[#62605b]">
+                            {{ $userRating ? 'Update rating' : 'Save rating' }}
+                        </button>
+                    </div>
+                </form>
+            @else
+                <p class="text-sm">
+                    <a href="{{ route('login') }}" class="underline underline-offset-4">Log in to rate this recipe</a>
+                </p>
+            @endauth
+        </section>
 
         @if ($recipe->source_url)
             <footer
