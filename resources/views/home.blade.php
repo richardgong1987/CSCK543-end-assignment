@@ -41,6 +41,8 @@
         <img
             src="{{ asset('images/recipes/mushroom-doner.jpg')}}"
             alt="A colorful picture of delicious mushroom doner"
+            width="832"
+            height="468"
             class="max-h-80 w-full rounded-lg object-cover shadow-md"
         >
     </section>

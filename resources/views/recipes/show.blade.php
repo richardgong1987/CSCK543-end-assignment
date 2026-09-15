@@ -1,6 +1,6 @@
 @use('App\Support\Duration')
 
-<x-layouts.app :title="$recipe->title">
+<x-layouts.app :title="$recipe->title" :description="Str::limit($recipe->description, 155)">
     <nav aria-label="Breadcrumb" class="mb-6 text-sm">
         <a href="{{ route('recipes.index') }}" class="underline-offset-4 hover:underline">
             &larr; All recipes

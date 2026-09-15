@@ -48,7 +48,7 @@
             <ul role="list" class="grid gap-6 sm:grid-cols-2">
                 @foreach ($recipes as $recipe)
                     <li class="flex">
-                        <x-recipe-card :$recipe />
+                        <x-recipe-card :$recipe :prioritise-image="$loop->first" />
                     </li>
                 @endforeach
             </ul>

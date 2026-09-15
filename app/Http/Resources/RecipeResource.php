@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Recipe;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -12,7 +13,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * Expects the recipe to come from RecipeSearch, which loads the relationships and counts
  * read here.
  *
- * @mixin \App\Models\Recipe
+ * @mixin Recipe
  */
 class RecipeResource extends JsonResource
 {

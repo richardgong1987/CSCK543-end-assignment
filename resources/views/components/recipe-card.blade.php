@@ -1,4 +1,9 @@
-@props(['recipe'])
+@props([
+    'recipe',
+    // For the first card of a listing, whose image is usually the largest thing on screen:
+    // lazy loading it would delay the page's main paint, so it loads straight away instead.
+    'prioritiseImage' => false,
+])
 
 @php
     // Supplied by the listing query's withAvg/withCount; absent when a card is
@@ -16,7 +21,8 @@
             alt="{{ $recipe->title }}"
             width="832"
             height="468"
-            loading="lazy"
+            loading="{{ $prioritiseImage ? 'eager' : 'lazy' }}"
+            @if ($prioritiseImage) fetchpriority="high" @endif
             class="aspect-video w-full object-cover"
         >
     @endif
