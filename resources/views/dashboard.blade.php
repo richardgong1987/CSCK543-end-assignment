@@ -21,6 +21,12 @@
                 <dd>{{ $user->created_at->format('j F Y') }}</dd>
             </div>
         </dl>
+
+        <p class="mt-4 text-sm">
+            <a href="{{ route('account.edit') }}" class="underline underline-offset-4">
+                Edit your details, change your password or delete your account
+            </a>
+        </p>
     </section>
 
     <section aria-labelledby="saved-heading" class="mb-10">

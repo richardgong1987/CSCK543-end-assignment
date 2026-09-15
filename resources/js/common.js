@@ -103,6 +103,9 @@ function linkErrorMessage(input, messageId, shouldLink) {
     }
 }
 
+// Mirrors Password::defaults() on the server, which is Laravel's 8-character minimum.
+export const MIN_PASSWORD_LENGTH = 8;
+
 export function isValidEmail(value) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }

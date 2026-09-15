@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AccountPasswordController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\FavouriteController;
@@ -27,6 +29,11 @@ Route::middleware('auth')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+    Route::get('account', [AccountController::class, 'edit'])->name('account.edit');
+    Route::patch('account', [AccountController::class, 'update'])->name('account.update');
+    Route::delete('account', [AccountController::class, 'destroy'])->name('account.destroy');
+    Route::put('account/password', [AccountPasswordController::class, 'update'])->name('account.password.update');
 
     Route::post('recipes/{recipe}/favourite', [FavouriteController::class, 'store'])
         ->name('recipes.favourite.store');

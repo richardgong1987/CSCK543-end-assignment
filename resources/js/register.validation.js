@@ -1,7 +1,4 @@
-import { isValidEmail, setupFormValidation } from './common.js';
-
-// Mirrors Password::defaults() on the server, which is Laravel's 8-character minimum.
-const MIN_PASSWORD_LENGTH = 8;
+import { isValidEmail, MIN_PASSWORD_LENGTH, setupFormValidation } from './common.js';
 
 setupFormValidation({
     formId: 'registerForm',

@@ -200,6 +200,10 @@ follow the controller.
 | `POST /recipes/{slug}/favourite`   | signed in        | `FavouriteController@store` — save a favourite                  |
 | `DELETE /recipes/{slug}/favourite` | signed in        | `FavouriteController@destroy` — remove a favourite              |
 | `PUT /recipes/{slug}/rating`       | signed in        | `RatingController@update` — create or replace the user's rating |
+| `/account`                         | signed in        | `AccountController@edit` — account settings                     |
+| `PATCH /account`                   | signed in        | `AccountController@update` — change name and email              |
+| `PUT /account/password`            | signed in        | `AccountPasswordController@update` — change the password        |
+| `DELETE /account`                  | signed in        | `AccountController@destroy` — delete the account                |
 
 ### Layout and navigation
 
@@ -317,8 +321,27 @@ cache, which is why the `cache` table matters (`CACHE_STORE=database`).
 | `app/Http/Controllers/DashboardController.php` | Loads the signed-in user's saved recipes, most recently saved first, and their ratings with the recipe each one is for. Everything is read through the signed-in user, so nobody sees another user's favourites or ratings. |
 | `resources/views/dashboard.blade.php`          | The user's name, email and join date; the saved recipes as recipe cards; and each rated recipe with the scores given, leaving out the facets the user skipped. |
 
-Editing details, changing the password and deleting the account are not built; see
-[Not built yet](#not-built-yet).
+Its "Your details" card links to the account settings.
+
+### Account settings — `/account`
+
+| File                                                  | What it does                                                         |
+| ----------------------------------------------------- | --------------------------------------------------------------------- |
+| `app/Http/Controllers/AccountController.php`          | Shows the settings page; saves a new name and email (the email must be unused, though keeping your own passes); deletes the account once the user confirms their password, then logs them out and ends the session. |
+| `app/Http/Controllers/AccountPasswordController.php`  | Changes the password. The current password is required, and the new one must meet `Password::defaults()` and be confirmed. |
+| `resources/views/account/edit.blade.php`              | Three forms on one page: details, password, and deleting the account. |
+
+Things to know before changing these:
+
+- **Deleting an account removes the user's favourites and ratings too**, through the
+  cascading foreign keys on `favourites` and `ratings`. This is also how test accounts
+  get deleted (§9).
+- **The password form and the delete form both have a `password` field**, so their
+  errors are kept apart in named error bags, `updatePassword` and `deleteAccount`, and
+  their inputs and messages have distinct ids (`new_password`, `delete_password`). A
+  new form on this page with a clashing field name needs the same treatment.
+- The rules mirror registration's: `max:255` on name and email with a matching
+  `maxlength`, and the same 8-character password minimum on both sides.
 
 ### JavaScript
 
@@ -333,6 +356,7 @@ its form is on the page and otherwise does nothing.
 | `resources/js/common.js`                                | `setupFormValidation()`, shared by login and registration. A field is checked when the user leaves it, but only once they have typed in it, so tabbing through an empty form stays quiet. While a message is showing, it is re-checked on every keystroke and clears the moment the value is fixed; all visible messages are re-checked, because one rule can depend on another field (correcting the password can fix the confirmation). On submit every field is checked and focus moves to the first invalid one. Each message is linked to its field with `aria-describedby` and `aria-invalid` only while it shows, and the server's messages from the previous submission are hidden and unlinked once the user starts typing. |
 | `resources/js/register.validation.js`                   | Registration's fields and rules: a name, a well-formed email, a password of at least 8 characters (matching `Password::defaults()`) and a matching confirmation. |
 | `resources/js/login.validation.js`                      | Login's fields and rules: a well-formed email and a non-empty password. |
+| `resources/js/account.validation.js`                    | The account settings page's three forms: a name and well-formed email; the current password, a new one of at least 8 characters and a matching confirmation; and a password to confirm deletion. The 8-character minimum is `MIN_PASSWORD_LENGTH` in `common.js`, shared with registration. |
 | `resources/js/favourite-toggle.js`                      | Sends the Save/Remove favourite form with `fetch()` and flips the button in place, announcing the result to screen readers. Any failure, such as a network error or an expired session, falls back to a normal submit. |
 | `resources/js/star-rating.js`                           | Shows the rating form's 1–5 radio buttons as stars, with a hover preview. The radios stay underneath, visually hidden, so keyboards, screen readers and submission behave as without JavaScript. |
 
@@ -364,7 +388,9 @@ consistent.
 
 `input-error` renders a field's server message with the id `{field}-error`. Point the
 field at it with `aria-describedby` while the error exists, as the login and
-registration views do, so a screen reader reads the message with the field.
+registration views do, so a screen reader reads the message with the field. Pass `bag`
+to read a named error bag, and `id` when two forms on a page share a field name, as the
+account settings page does.
 
 ### Tests
 
@@ -378,6 +404,7 @@ registration views do, so a screen reader reads the message with the field.
 | `tests/Feature/FavouriteTest.php`          | Saving and removing favourites, guests, the dashboard list    |
 | `tests/Feature/RatingTest.php`             | Rating and re-rating a recipe, score validation, the form     |
 | `tests/Feature/DashboardTest.php`          | The account page: details, saved recipes, the user's ratings  |
+| `tests/Feature/AccountTest.php`            | Account settings: details, password change, deleting the account, error bags |
 | `tests/Feature/HomePageTest.php`           | The home page and its links                                   |
 | `tests/Feature/RecipeSchemaTest.php`       | Relationships, constraints and cascading deletes              |
 | `tests/Unit/DurationTest.php`, `tests/Unit/IngredientLineTest.php` | Time and ingredient formatting        |
@@ -392,14 +419,13 @@ says what already exists, so nobody redoes work that is done.
 
 | Work                       | Where it stands                                                                                                                                                                          |
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Account management         | Not built: editing a name or email, changing the password, deleting the account. The brief does not require them; deleting accounts would also answer §9's question of how test accounts get deleted. Decide as a group whether they are in scope. |
 | Password reset             | Not built. The brief does not require it; our proposal mentions it. Decide as a group whether it is in scope.                                                                             |
 
 #### Quality attributes
 
 | Work                    | Where it stands                                                                                                                                                                                                    |
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Accessibility**       | Automated checks done; a human screen-reader pass is still to do. Every page has exactly one `<h1>`, a `<main>` landmark, labelled controls, alt text on every image and a sensible heading order; pages with navigation also have a skip link, and the filter groups use `<fieldset>`/`<legend>` inside a `role="search"` form. Form errors, from JavaScript and from the server, are tied to their field with `aria-describedby` and `aria-invalid`, and a failed submit moves focus to the first invalid field. **Checked on 15 September 2026** in Chrome with axe-core 4.13 (WCAG 2.0, 2.1 and 2.2 A/AA plus best practices), in light and dark mode: no violations on the home page, the recipe listing, a recipe page (as a guest and logged in, with the rating form), login, registration (including the client-side and server-side error states) and the account page. A scripted keyboard pass over the same pages reached every control with Tab and found a visible focus change on each. Colour contrast was measured for the whole palette and fixed where it fell short: accent-red text darkened from `#f53003` to `#d32903` (3.9:1 → 5.1:1), the JavaScript error text given a dark-mode colour, input and select borders raised to 3:1 (`#91918f` light, `#676763` dark, for WCAG 1.4.11), and placeholders to `#767570`. The audit was a one-off script, not yet in the repository; it belongs with the end-to-end tests. Still to do: a screen-reader pass (VoiceOver or NVDA) and a person completing a keyboard-only journey, since a script cannot judge whether the focus order and announcements make sense. |
+| **Accessibility**       | Automated checks done; a human screen-reader pass is still to do. Every page has exactly one `<h1>`, a `<main>` landmark, labelled controls, alt text on every image and a sensible heading order; pages with navigation also have a skip link, and the filter groups use `<fieldset>`/`<legend>` inside a `role="search"` form. Form errors, from JavaScript and from the server, are tied to their field with `aria-describedby` and `aria-invalid`, and a failed submit moves focus to the first invalid field. **Checked on 15 September 2026** in Chrome with axe-core 4.13 (WCAG 2.0, 2.1 and 2.2 A/AA plus best practices), in light and dark mode: no violations on the home page, the recipe listing, a recipe page (as a guest and logged in, with the rating form), login, registration (including the client-side and server-side error states), the account page and the account settings page (including a server error on the delete form). A scripted keyboard pass over the same pages reached every control with Tab and found a visible focus change on each. Colour contrast was measured for the whole palette and fixed where it fell short: accent-red text darkened from `#f53003` to `#d32903` (3.9:1 → 5.1:1), the JavaScript error text given a dark-mode colour, input and select borders raised to 3:1 (`#91918f` light, `#676763` dark, for WCAG 1.4.11), and placeholders to `#767570`. The audit was a one-off script, not yet in the repository; it belongs with the end-to-end tests. Still to do: a screen-reader pass (VoiceOver or NVDA) and a person completing a keyboard-only journey, since a script cannot judge whether the focus order and announcements make sense. |
 | **Responsive layout**   | Built with Tailwind and checked at desktop and narrow widths. Not yet checked on real devices, or in Chrome's device emulation.                                                                                     |
 | **Target environment**  | We develop against `php artisan serve`. The brief specifies Apache via XAMPP on Windows, assessed in Chrome. Somebody needs to run the app that way and confirm it behaves, well before submission.                 |
 
@@ -407,7 +433,7 @@ says what already exists, so nobody redoes work that is done.
 
 | Work                          | Where it stands                                                                                                     |
 | ----------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Unit and feature tests        | 130 tests covering the schema, authentication, search, sorting, favourites, ratings, the account page and the other pages. Extend these as features land.          |
+| Unit and feature tests        | 149 tests covering the schema, authentication, search, sorting, favourites, ratings, the account page, account settings and the other pages. Extend these as features land.          |
 | **End-to-end tests**          | None. §7.1 asks for Playwright or Dusk covering register → log in → search → open a recipe → save a favourite → log out, including a keyboard-only journey. |
 | **Performance testing**       | None. §7.2 asks for Lighthouse, page weight, query counts and N+1 checks.                                            |
 | **Load and stress testing**   | None, and only relevant if the JSON endpoint below gets built. §7.3 describes the k6 runs and the figures to record. |
@@ -422,7 +448,7 @@ says what already exists, so nobody redoes work that is done.
 | **Security headers and CSP**  | Not done (§8.2).                                                                                                                                         |
 | **Production configuration**  | Not done (§8.3, §8.5): HTTPS, `Secure`/`HttpOnly`/`SameSite` cookies, `APP_DEBUG=false`, least-privilege database credentials.                            |
 | **Dependency audit**          | Not run (§8.5): `composer audit` and `pnpm audit`.                                                                                                       |
-| **Privacy notice**            | Not written (§9): why we collect a name and an email, and how test accounts get deleted.                                                                  |
+| **Privacy notice**            | Not written (§9): why we collect a name and an email, and how test accounts get deleted. The deletion itself exists: a user can delete their own account, with its favourites and ratings, from `/account`, and `php artisan migrate:fresh --seed` resets every account.                                                                  |
 | **Deployment write-up**       | Proposed in §10 but not yet written up for the report.                                                                                                   |
 
 #### Optional
