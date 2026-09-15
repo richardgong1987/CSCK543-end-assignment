@@ -172,6 +172,80 @@
             </section>
         @endif
 
+        <section aria-labelledby="rating-heading"
+            class="mt-10 rounded-lg bg-white p-5 shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:bg-[#161615] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]">
+            <h2 id="rating-heading" class="mb-4 text-lg font-medium">
+                {{ $userRating ? 'Your rating' : 'Rate this recipe' }}
+            </h2>
+
+            @auth
+                @php
+                    // Difficulty runs the other way from the rest: a high score means harder, not better.
+                    $ratingQuestions = [
+                        'overall' => ['label' => 'Overall', 'scale' => '1 = poor, 5 = excellent'],
+                        'taste' => ['label' => 'Taste', 'scale' => '1 = poor, 5 = excellent'],
+                        'difficulty' => ['label' => 'Difficulty', 'scale' => '1 = easy, 5 = hard'],
+                        'appearance' => ['label' => 'Appearance', 'scale' => '1 = poor, 5 = excellent'],
+                    ];
+
+                    $scoreOptionClasses = 'inline-flex min-w-10 justify-center rounded-sm border border-[#19140035] px-3 py-1.5 text-sm hover:border-[#1915014a] peer-checked:border-[#1b1b18] peer-checked:bg-[#1b1b18] peer-checked:text-white peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 dark:border-[#3E3E3A] dark:hover:border-[#62605b] dark:peer-checked:border-[#EDEDEC] dark:peer-checked:bg-[#EDEDEC] dark:peer-checked:text-[#1b1b18]';
+                @endphp
+
+                <form method="POST" action="{{ route('recipes.rating.update', $recipe) }}" class="grid gap-6">
+                    @csrf
+                    @method('PUT')
+
+                    @foreach ($ratingQuestions as $field => $question)
+                        @php
+                            $isRequired = $field === 'overall';
+                            $currentScore = (string) old($field, $userRating?->{$field});
+                        @endphp
+
+                        <fieldset aria-describedby="{{ $field }}-scale">
+                            <legend class="text-sm font-medium">
+                                {{ $question['label'] }}
+                                <span class="font-normal text-[#706f6c] dark:text-[#A1A09A]">({{ $isRequired ? 'required' : 'optional' }})</span>
+                            </legend>
+
+                            <p id="{{ $field }}-scale" class="mb-2 text-xs text-[#706f6c] dark:text-[#A1A09A]">
+                                {{ $question['scale'] }}
+                            </p>
+
+                            <div class="flex flex-wrap gap-2">
+                                @unless ($isRequired)
+                                    {{-- A radio group cannot be cleared once chosen, so skipping needs an option of its own. --}}
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="{{ $field }}" value="" @checked($currentScore === '') class="peer sr-only">
+                                        <span class="{{ $scoreOptionClasses }}">Skip</span>
+                                    </label>
+                                @endunless
+
+                                @foreach (range(1, 5) as $score)
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="{{ $field }}" value="{{ $score }}" @checked($currentScore === (string) $score) @required($isRequired) class="peer sr-only">
+                                        <span class="{{ $scoreOptionClasses }}">{{ $score }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
+
+                            <x-input-error :field="$field" class="mt-2" />
+                        </fieldset>
+                    @endforeach
+
+                    <div>
+                        <button type="submit"
+                            class="cursor-pointer rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal hover:border-[#1915014a] dark:border-[#3E3E3A] dark:hover:border-[#62605b]">
+                            {{ $userRating ? 'Update rating' : 'Save rating' }}
+                        </button>
+                    </div>
+                </form>
+            @else
+                <p class="text-sm">
+                    <a href="{{ route('login') }}" class="underline underline-offset-4">Log in to rate this recipe</a>
+                </p>
+            @endauth
+        </section>
+
         @if ($recipe->source_url)
             <footer
                 class="mt-10 border-t border-[#e3e3e0] pt-5 text-sm text-[#706f6c] dark:border-[#3E3E3A] dark:text-[#A1A09A]">

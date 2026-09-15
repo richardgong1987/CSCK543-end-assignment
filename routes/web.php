@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\FavouriteController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
@@ -32,4 +33,8 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('recipes/{recipe}/favourite', [FavouriteController::class, 'destroy'])
         ->name('recipes.favourite.destroy');
+
+    // PUT rather than POST: a user has at most one rating per recipe, and rating again replaces it.
+    Route::put('recipes/{recipe}/rating', [RatingController::class, 'update'])
+        ->name('recipes.rating.update');
 });

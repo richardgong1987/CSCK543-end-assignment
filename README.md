@@ -334,6 +334,7 @@ consistent.
 | `tests/Unit/RecipeSearchCriteriaTest.php`  | The allow-list that stands between a URL and the SQL          |
 | `tests/Feature/RecipePageTest.php`         | The listing and the recipe detail page                        |
 | `tests/Feature/FavouriteTest.php`          | Saving and removing favourites, guests, the dashboard list    |
+| `tests/Feature/RatingTest.php`             | Rating and re-rating a recipe, score validation, the form     |
 | `tests/Feature/HomePageTest.php`           | The home page and its links                                   |
 | `tests/Feature/RecipeSchemaTest.php`       | Relationships, constraints and cascading deletes              |
 | `tests/Unit/DurationTest.php`, `tests/Unit/IngredientLineTest.php` | Time and ingredient formatting        |
@@ -348,7 +349,6 @@ says what already exists, so nobody redoes work that is done.
 
 | Work                       | Where it stands                                                                                                                                                                          |
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Rating a recipe**        | The `ratings` table, the `Rating` model, `User::ratings()` and `Recipe::ratings()` exist, sample scores are seeded, and search can already filter and sort on the average. Missing: any way for a user to leave one. Validate `overall` as `required\|integer\|between:1,5` and the three facets as `nullable\|integer\|between:1,5`, to match the database constraints. |
 | **The account page**       | `/dashboard` is a placeholder that only greets the user. It needs the saved recipes, the user's own ratings, and whatever profile editing we agree on.                                    |
 | **Client-side validation** | Done on `/register` and `/login`. `resources/js/common.js` holds the shared submit-time check (`setupFormValidation`); `register.validation.js` and `login.validation.js` only list each form's fields and rules — name, email, password length (8, matching `Password::defaults()`) and confirmation on register; email and a non-empty password on login. Both forms carry `novalidate`, so JavaScript has replaced the browser's own messages, and typing in a field hides the server's messages from the previous submission. Missing: feedback before submit (on `blur` or `input`), and `aria-invalid` / `aria-describedby` so the messages reach a screen reader. |
 | **JavaScript behaviour**   | The brief says JavaScript must drive the client-side behaviour. We have four files: `resources/js/app.js` (the sort menu and keeping empty fields out of the search URL), `resources/js/common.js` (the shared form-validation setup) and `resources/js/login.validation.js` / `register.validation.js` (each form's fields and rules, described above). Still to come: saving a favourite without a page reload, and a star-rating control. |
@@ -366,7 +366,7 @@ says what already exists, so nobody redoes work that is done.
 
 | Work                          | Where it stands                                                                                                     |
 | ----------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Unit and feature tests        | 107 tests covering the schema, authentication, search, sorting, favourites and the pages. Extend these as features land.          |
+| Unit and feature tests        | 123 tests covering the schema, authentication, search, sorting, favourites, ratings and the pages. Extend these as features land.          |
 | **End-to-end tests**          | None. §7.1 asks for Playwright or Dusk covering register → log in → search → open a recipe → save a favourite → log out, including a keyboard-only journey. |
 | **Performance testing**       | None. §7.2 asks for Lighthouse, page weight, query counts and N+1 checks.                                            |
 | **Load and stress testing**   | None, and only relevant if the JSON endpoint below gets built. §7.3 describes the k6 runs and the figures to record. |
