@@ -1,7 +1,11 @@
 <x-layouts.app title="Log in to your account">
-    <div class ="max-w-md mx-auto mt-40">
-        <h1 class="text-2xl font-bold mb-6 text-center">Log in to your account </h1>
-        <p class="text-sm text-[#706f6c] dark:text-[#A1A09A] mb-6 text-center">Enter your email and password below to log in</p>
+    <section class ="grid place-items-center content-center gap-8 h-screen">
+
+
+        <section>
+            <h1 class="text-2xl font-bold mb-6 text-center">Log in to your account </h1>
+            <h2 class="text-sm text-[#706f6c] dark:text-[#A1A09A] mb-6 text-center">Enter your email and password below to log in</h2>
+        </section>
 
         <form method="POST" action="{{ route('login') }}" 
         class="flex 
@@ -11,7 +15,9 @@
         m-8 
         shadow-md 
         rounded-md 
-        p-8"
+        p-8
+        w-128
+        "
         id = "loginForm"
         novalidate
         >
@@ -34,7 +40,7 @@
                     Please enter a valid email address. 
                 </p>
                 @error('email')
-                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                    <p class="text-sm text-red-600 mt-1 server-error">{{ $message }}</p>
                 @enderror
             </div>
             {{-- PASSWORD ---}}
@@ -54,7 +60,7 @@
                 </p>
 
                 @error('password')
-                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                    <p class="text-sm text-red-600 mt-1 server-error">{{ $message }}</p>
                 @enderror
             </div>
             {{-- REMEMBER ME ---}}
@@ -77,5 +83,5 @@
                 Sign up
             </a>
         </p>
-    </div>
+</section>
 </x-layouts.app>
