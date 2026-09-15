@@ -15,25 +15,30 @@
 
             @auth
                 @if ($isFavourite)
-                    <form method="POST" action="{{ route('recipes.favourite.destroy', $recipe) }}">
+                    <form method="POST" action="{{ route('recipes.favourite.destroy', $recipe) }}" class="mb-4">
                         @csrf
                         @method('DELETE')
 
                         <button type="submit"
-                            class="mb-4 rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100">
+                            class="cursor-pointer rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal hover:border-[#1915014a] dark:border-[#3E3E3A] dark:hover:border-[#62605b]">
                             Remove favourite
                         </button>
                     </form>
                 @else
-                    <form method="POST" action="{{ route('recipes.favourite.store', $recipe) }}">
+                    <form method="POST" action="{{ route('recipes.favourite.store', $recipe) }}" class="mb-4">
                         @csrf
 
                         <button type="submit"
-                            class="mb-4 rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100">
+                            class="cursor-pointer rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal hover:border-[#1915014a] dark:border-[#3E3E3A] dark:hover:border-[#62605b]">
                             Save favourite
                         </button>
                     </form>
                 @endif
+            @else
+                {{-- Without this, guests have no way to learn that recipes can be saved. --}}
+                <p class="mb-4 text-sm">
+                    <a href="{{ route('login') }}" class="underline underline-offset-4">Log in to save this recipe</a>
+                </p>
             @endauth
 
             @if ($recipe->categories->isNotEmpty() || $recipe->dietaryTags->isNotEmpty())
