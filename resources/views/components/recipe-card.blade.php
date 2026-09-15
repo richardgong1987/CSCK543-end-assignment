@@ -6,7 +6,10 @@
     $averageRating = $recipe->average_rating ?? null;
 @endphp
 
-<article class="flex h-full flex-col overflow-hidden rounded-lg bg-white shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:bg-[#161615] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]">
+{{-- The title link is stretched over the whole card (see its after: classes) so
+     the entire card is clickable while screen readers still hear one link named
+     after the recipe, not the full card text. --}}
+<article class="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg bg-white shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] outline-offset-2 transition-shadow hover:shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.4)] has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-[#1b1b18] dark:bg-[#161615] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] dark:hover:shadow-[inset_0px_0px_0px_1px_#fffaed66] dark:has-[a:focus-visible]:outline-[#EDEDEC]">
     @if ($recipe->image_path)
         <img
             src="{{ asset($recipe->image_path) }}"
@@ -22,7 +25,7 @@
         <h3 class="text-base font-medium">
             <a
                 href="{{ route('recipes.show', $recipe) }}"
-                class="underline-offset-4 hover:underline focus:underline"
+                class="underline-offset-4 group-hover:underline focus:underline focus-visible:outline-none after:absolute after:inset-0"
             >
                 {{ $recipe->title }}
             </a>
