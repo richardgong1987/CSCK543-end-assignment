@@ -1,5 +1,7 @@
 import './register.validation.js';
 import './login.validation.js';
+import './favourite-toggle.js';
+import './star-rating.js';
 /**
  * Progressive enhancement for the recipe search form.
  *

@@ -14,26 +14,25 @@
             <p class="mb-4 text-[#706f6c] dark:text-[#A1A09A]">{{ $recipe->description }}</p>
 
             @auth
-                @if ($isFavourite)
-                    <form method="POST" action="{{ route('recipes.favourite.destroy', $recipe) }}" class="mb-4">
-                        @csrf
-                        @method('DELETE')
+                {{-- One form that flips between saving and removing. It submits normally without
+                     JavaScript; resources/js/favourite-toggle.js sends it in the background instead. --}}
+                <form method="POST"
+                    action="{{ $isFavourite ? route('recipes.favourite.destroy', $recipe) : route('recipes.favourite.store', $recipe) }}"
+                    data-favourite-form
+                    data-save-url="{{ route('recipes.favourite.store', $recipe) }}"
+                    data-remove-url="{{ route('recipes.favourite.destroy', $recipe) }}"
+                    class="mb-4 flex flex-wrap items-center gap-3">
+                    @csrf
+                    {{-- A disabled input is not submitted, so the request is a DELETE only while the recipe is saved. --}}
+                    <input type="hidden" name="_method" value="DELETE" @disabled(! $isFavourite)>
 
-                        <button type="submit"
-                            class="cursor-pointer rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal hover:border-[#1915014a] dark:border-[#3E3E3A] dark:hover:border-[#62605b]">
-                            Remove favourite
-                        </button>
-                    </form>
-                @else
-                    <form method="POST" action="{{ route('recipes.favourite.store', $recipe) }}" class="mb-4">
-                        @csrf
+                    <button type="submit"
+                        class="cursor-pointer rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal hover:border-[#1915014a] disabled:cursor-wait disabled:opacity-60 dark:border-[#3E3E3A] dark:hover:border-[#62605b]">
+                        {{ $isFavourite ? 'Remove favourite' : 'Save favourite' }}
+                    </button>
 
-                        <button type="submit"
-                            class="cursor-pointer rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal hover:border-[#1915014a] dark:border-[#3E3E3A] dark:hover:border-[#62605b]">
-                            Save favourite
-                        </button>
-                    </form>
-                @endif
+                    <p role="status" data-favourite-status class="text-sm text-[#706f6c] dark:text-[#A1A09A]"></p>
+                </form>
             @else
                 {{-- Without this, guests have no way to learn that recipes can be saved. --}}
                 <p class="mb-4 text-sm">
@@ -211,7 +210,8 @@
                                 {{ $question['scale'] }}
                             </p>
 
-                            <div class="flex flex-wrap gap-2">
+                            {{-- resources/js/star-rating.js turns the numbered options into stars. --}}
+                            <div class="flex flex-wrap items-center gap-2" data-star-rating>
                                 @unless ($isRequired)
                                     {{-- A radio group cannot be cleared once chosen, so skipping needs an option of its own. --}}
                                     <label class="cursor-pointer">
@@ -221,9 +221,9 @@
                                 @endunless
 
                                 @foreach (range(1, 5) as $score)
-                                    <label class="cursor-pointer">
+                                    <label class="cursor-pointer" data-score="{{ $score }}">
                                         <input type="radio" name="{{ $field }}" value="{{ $score }}" @checked($currentScore === (string) $score) @required($isRequired) class="peer sr-only">
-                                        <span class="{{ $scoreOptionClasses }}">{{ $score }}</span>
+                                        <span class="{{ $scoreOptionClasses }}" data-score-face>{{ $score }}</span>
                                     </label>
                                 @endforeach
                             </div>

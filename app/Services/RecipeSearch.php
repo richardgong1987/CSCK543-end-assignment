@@ -114,9 +114,8 @@ final class RecipeSearch
             ->select('recipes.*')
             ->join('time_bands as prep_band', 'prep_band.id', '=', 'recipes.prep_time_band_id')
             ->join('time_bands as cook_band', 'cook_band.id', '=', 'recipes.cook_time_band_id')
-            ->with(['categories', 'dietaryTags', 'prepTimeBand', 'cookTimeBand'])
-            ->withAvg('ratings as average_rating', 'overall')
-            ->withCount(['ratings', 'steps']);
+            ->withCardDetails()
+            ->withCount('steps');
 
         $this->applyKeyword($query);
         $this->applyFilters($query);

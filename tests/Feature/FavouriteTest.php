@@ -60,6 +60,28 @@ it('leaves other users\' favourites alone when one user removes theirs', functio
     expect($otherUser->favouriteRecipes()->whereKey($recipe->id)->exists())->toBeTrue();
 });
 
+it('answers the recipe page\'s script with the new favourite state as JSON', function () {
+    $user = User::factory()->create();
+    $recipe = Recipe::first();
+
+    $this->actingAs($user)
+        ->postJson(route('recipes.favourite.store', $recipe))
+        ->assertOk()
+        ->assertExactJson(['is_favourite' => true, 'message' => 'Recipe saved to favourites.']);
+
+    // The script posts the form as it stands, so removal arrives as a spoofed DELETE.
+    $this->actingAs($user)
+        ->postJson(route('recipes.favourite.destroy', $recipe), ['_method' => 'DELETE'])
+        ->assertOk()
+        ->assertExactJson(['is_favourite' => false, 'message' => 'Recipe removed from favourites.']);
+
+    expect($user->favouriteRecipes()->exists())->toBeFalse();
+});
+
+it('tells the script a guest is not logged in instead of redirecting', function () {
+    $this->postJson(route('recipes.favourite.store', Recipe::first()))->assertUnauthorized();
+});
+
 it('sends guests to the login page instead of changing favourites', function () {
     $recipe = Recipe::first();
     $favouritesBefore = Favourite::count();

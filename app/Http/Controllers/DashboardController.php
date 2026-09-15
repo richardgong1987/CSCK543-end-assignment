@@ -7,14 +7,18 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    /**
+     * The account page. Everything on it is read through the signed-in user, so one
+     * user can never see another's favourites or ratings.
+     */
     public function index(Request $request): View
     {
-        $favouriteRecipes = $request->user()
-            ->favouriteRecipes()
-            ->get();
+        $user = $request->user();
 
         return view('dashboard', [
-            'favouriteRecipes' => $favouriteRecipes,
+            'user' => $user,
+            'favouriteRecipes' => $user->favouriteRecipes()->withCardDetails()->get(),
+            'ratings' => $user->ratings()->with('recipe')->latest('updated_at')->get(),
         ]);
     }
 }

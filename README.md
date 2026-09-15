@@ -335,6 +335,7 @@ consistent.
 | `tests/Feature/RecipePageTest.php`         | The listing and the recipe detail page                        |
 | `tests/Feature/FavouriteTest.php`          | Saving and removing favourites, guests, the dashboard list    |
 | `tests/Feature/RatingTest.php`             | Rating and re-rating a recipe, score validation, the form     |
+| `tests/Feature/DashboardTest.php`          | The account page: details, saved recipes, the user's ratings  |
 | `tests/Feature/HomePageTest.php`           | The home page and its links                                   |
 | `tests/Feature/RecipeSchemaTest.php`       | Relationships, constraints and cascading deletes              |
 | `tests/Unit/DurationTest.php`, `tests/Unit/IngredientLineTest.php` | Time and ingredient formatting        |
@@ -349,9 +350,9 @@ says what already exists, so nobody redoes work that is done.
 
 | Work                       | Where it stands                                                                                                                                                                          |
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **The account page**       | `/dashboard` is a placeholder that only greets the user. It needs the saved recipes, the user's own ratings, and whatever profile editing we agree on.                                    |
+| The account page           | Built: `/dashboard` shows the user's name, email and join date, their saved recipes as recipe cards, and every recipe they have rated with the scores they gave. Still to decide as a group: whether users can edit their details, change their password or delete their account (the last would also answer §9's question of how test accounts get deleted). |
 | **Client-side validation** | Done on `/register` and `/login`. `resources/js/common.js` holds the shared submit-time check (`setupFormValidation`); `register.validation.js` and `login.validation.js` only list each form's fields and rules — name, email, password length (8, matching `Password::defaults()`) and confirmation on register; email and a non-empty password on login. Both forms carry `novalidate`, so JavaScript has replaced the browser's own messages, and typing in a field hides the server's messages from the previous submission. Missing: feedback before submit (on `blur` or `input`), and `aria-invalid` / `aria-describedby` so the messages reach a screen reader. |
-| **JavaScript behaviour**   | The brief says JavaScript must drive the client-side behaviour. We have four files: `resources/js/app.js` (the sort menu and keeping empty fields out of the search URL), `resources/js/common.js` (the shared form-validation setup) and `resources/js/login.validation.js` / `register.validation.js` (each form's fields and rules, described above). Still to come: saving a favourite without a page reload, and a star-rating control. |
+| JavaScript behaviour       | Built, as progressive enhancement: every form still works with JavaScript off. `resources/js/app.js` (the sort menu and keeping empty fields out of the search URL), `common.js` (the shared form-validation setup), `login.validation.js` / `register.validation.js` (each form's fields and rules, described above), `favourite-toggle.js` (saves or removes a favourite with `fetch()` and updates the button in place; `FavouriteController` answers JSON when asked, and any failure falls back to a normal submit) and `star-rating.js` (shows the rating form's 1–5 radio buttons as stars with a hover preview, leaving the radios underneath for keyboards and screen readers). No automated browser tests cover these yet; see End-to-end tests below. |
 | Password reset             | Not built. The brief does not require it; our proposal mentions it. Decide as a group whether it is in scope.                                                                             |
 
 #### Quality attributes
@@ -366,7 +367,7 @@ says what already exists, so nobody redoes work that is done.
 
 | Work                          | Where it stands                                                                                                     |
 | ----------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Unit and feature tests        | 123 tests covering the schema, authentication, search, sorting, favourites, ratings and the pages. Extend these as features land.          |
+| Unit and feature tests        | 130 tests covering the schema, authentication, search, sorting, favourites, ratings, the account page and the other pages. Extend these as features land.          |
 | **End-to-end tests**          | None. §7.1 asks for Playwright or Dusk covering register → log in → search → open a recipe → save a favourite → log out, including a keyboard-only journey. |
 | **Performance testing**       | None. §7.2 asks for Lighthouse, page weight, query counts and N+1 checks.                                            |
 | **Load and stress testing**   | None, and only relevant if the JSON endpoint below gets built. §7.3 describes the k6 runs and the figures to record. |

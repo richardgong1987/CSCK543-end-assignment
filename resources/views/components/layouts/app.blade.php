@@ -34,7 +34,7 @@
 
         <div class="flex items-center gap-4">
             @auth
-                <a href="{{ route('dashboard') }}" class="underline-offset-4 hover:underline">Dashboard</a>
+                <a href="{{ route('dashboard') }}" class="underline-offset-4 hover:underline">Your account</a>
 
                 <span class="text-[#706f6c] dark:text-[#A1A09A]">{{ auth()->user()->name }}</span>
 
