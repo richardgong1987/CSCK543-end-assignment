@@ -440,11 +440,6 @@ account settings page does.
 | `tests/Feature/RecipeSchemaTest.php`       | Relationships, constraints and cascading deletes              |
 | `tests/Unit/DurationTest.php`, `tests/Unit/IngredientLineTest.php` | Time and ingredient formatting        |
 
-### Not built yet
-
-Measured against the assignment brief (`docs/requirement/Group Project.md`) and our
-own technical proposal (`docs/requirement/1. Technical architecture.md`). Each entry
-says what already exists, so nobody redoes work that is done.
 
 #### Features the brief asks for
 
