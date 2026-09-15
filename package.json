@@ -8,6 +8,7 @@
         "test:e2e": "playwright test"
     },
     "devDependencies": {
+        "@fontsource/instrument-sans": "5.3.0",
         "@playwright/test": "1.63.0",
         "@tailwindcss/vite": "^4.0.0",
         "concurrently": "^10.0.3",

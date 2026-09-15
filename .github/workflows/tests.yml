@@ -1,7 +1,10 @@
 name: Tests
 
 on:
+  # Pull requests run once, on the pull_request event. Pushes run only for master, so a
+  # branch with an open pull request is not tested twice for every commit.
   push:
+    branches: [master]
   pull_request:
 
 jobs:
