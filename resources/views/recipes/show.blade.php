@@ -27,7 +27,7 @@
                     <input type="hidden" name="_method" value="DELETE" @disabled(! $isFavourite)>
 
                     <button type="submit"
-                        class="cursor-pointer rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal hover:border-[#1915014a] disabled:cursor-wait disabled:opacity-60 dark:border-[#3E3E3A] dark:hover:border-[#62605b]">
+                        class="cursor-pointer rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal hover:border-[#1915014a] aria-busy:cursor-wait aria-busy:opacity-60 dark:border-[#3E3E3A] dark:hover:border-[#62605b]">
                         {{ $isFavourite ? 'Remove favourite' : 'Save favourite' }}
                     </button>
 

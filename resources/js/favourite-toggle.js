@@ -20,12 +20,19 @@ document.querySelectorAll('form[data-favourite-form]').forEach((form) => {
         button.textContent = isFavourite ? BUTTON_LABELS.saved : BUTTON_LABELS.notSaved;
     };
 
+    let isSending = false;
+
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        // Read the form before disabling anything, or the disabled state could leak into it.
+        // A second press while the first request is out would send the opposite change too.
+        // The button is marked busy rather than disabled: disabling a focused button throws
+        // keyboard focus back to the top of the page.
+        if (isSending) return;
+
         const body = new FormData(form);
-        button.disabled = true;
+        isSending = true;
+        button.setAttribute('aria-busy', 'true');
 
         try {
             const response = await fetch(form.action, {
@@ -46,7 +53,8 @@ document.querySelectorAll('form[data-favourite-form]').forEach((form) => {
             // form.submit() does not fire the submit event, so this cannot loop.
             form.submit();
         } finally {
-            button.disabled = false;
+            isSending = false;
+            button.removeAttribute('aria-busy');
         }
     });
 });

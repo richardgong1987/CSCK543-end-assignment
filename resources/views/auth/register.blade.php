@@ -1,7 +1,7 @@
 
 <x-layouts.app title="Create an account" >
 
-    <section class="grid place-items-center content-center gap-8 h-screen">
+    <section class="grid place-items-center content-center gap-8 py-8">
 
         <section class="max-w-md">
             <h1 class="text-3xl text-left">Register</h1>
@@ -19,7 +19,7 @@
             border
             rounded-md
             p-8
-            w-128"
+            w-full"
         id="registerForm"
         novalidate
         >
@@ -109,6 +109,11 @@
                 {{-- Server-side error message --}}
                 <x-input-error field="password_confirmation" class="server-error" />
             </div>
+
+            <p class="text-sm text-[#706f6c] dark:text-[#A1A09A]">
+                We use your name and email only to run your account.
+                <a href="{{ route('privacy') }}" class="underline underline-offset-4">How we handle your details</a>
+            </p>
 
             <x-primary-button class="w-full">Create account</x-primary-button>
         </form>

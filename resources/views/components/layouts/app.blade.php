@@ -76,7 +76,10 @@
     <div class="mx-auto max-w-4xl px-6 py-8 text-sm text-[#706f6c] dark:text-[#A1A09A]">
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <p>&copy;{{ date('Y') }} Recipe App. All rights reserved.</p>
-            <p>CSK543 Group Project &middot; University of Liverpool</p>
+            <p>
+                CSK543 Group Project &middot; University of Liverpool &middot;
+                <a href="{{ route('privacy') }}" class="underline underline-offset-4">Privacy notice</a>
+            </p>
         </div>
 
     </div>

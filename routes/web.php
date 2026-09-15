@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::view('privacy', 'privacy')->name('privacy');
+
 // Browsing recipes does not require an account; saving and rating them will.
 Route::get('recipes', [RecipeController::class, 'index'])->name('recipes.index');
 Route::get('recipes/{recipe}', [RecipeController::class, 'show'])->name('recipes.show');

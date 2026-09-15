@@ -1,5 +1,5 @@
 <x-layouts.app title="Log in to your account">
-    <section class ="grid place-items-center content-center gap-8 h-screen">
+    <section class ="grid place-items-center content-center gap-8 py-8">
 
 
         <section>
@@ -12,11 +12,11 @@
         flex-col 
         gap-6 
         border-2 
-        m-8 
+        my-8 
         shadow-md 
         rounded-md 
         p-8
-        w-128
+        w-full max-w-128
         "
         id = "loginForm"
         novalidate
