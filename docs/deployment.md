@@ -1,50 +1,11 @@
 # Deployment and production configuration
 
 Written from the technical proposal (§8.3, §8.5, §10) for the report and for whoever
-sets the application up outside `composer run dev`. **Nothing here has been deployed.**
-The assessed copy runs locally, and the Apache steps below have not yet been tried on
-Windows; the README's "Target environment" row tracks that.
+sets the application up on a real server. **Nothing here has been deployed.** To run it
+on Apache with XAMPP, the way it is assessed, follow [xampp.md](xampp.md); this page
+covers what changes beyond that for production.
 
-## 1. Running it on Apache (XAMPP on Windows)
-
-The brief assesses the application on Apache via XAMPP, in Chrome.
-
-1. Use an XAMPP build whose PHP is **8.3 or newer**, with the `pdo_mysql`, `mbstring`,
-   `openssl` and `fileinfo` extensions enabled in `php.ini`.
-2. Point Apache at the project's **`public/` folder**, never the project root — the
-   root holds `.env` and the source code. A virtual host is the cleanest way:
-
-   ```apache
-   <VirtualHost *:80>
-       ServerName recipebox.test
-       DocumentRoot "C:/xampp/htdocs/CSCK543-end-assignment/public"
-       <Directory "C:/xampp/htdocs/CSCK543-end-assignment/public">
-           AllowOverride All
-           Require all granted
-       </Directory>
-   </VirtualHost>
-   ```
-
-   `AllowOverride All` and `mod_rewrite` are needed for `public/.htaccess`, which sends
-   every URL to `index.php`.
-3. From the project folder:
-
-   ```sh
-   composer install --no-dev --optimize-autoloader
-   pnpm install
-   pnpm run build
-   copy .env.example .env
-   php artisan key:generate
-   php artisan migrate --seed
-   ```
-
-   Set the MySQL credentials in `.env` before migrating, as the README describes.
-4. **Delete `public/hot` if it exists.** A Vite dev server writes it, and while it is
-   there every page tries to load its CSS and JavaScript from that server instead of
-   `public/build`, so the site appears unstyled.
-5. Apache must be able to write to `storage/` and `bootstrap/cache/`.
-
-## 2. Production configuration checklist
+## 1. Production configuration checklist
 
 Everything below is set in `.env` on the server. `.env.example` is tuned for
 development, so several values must change.
@@ -122,7 +83,7 @@ the proxy's `X-Forwarded-Proto` header, so add the proxy's address in
 
 Trust only the proxy's own address, never `*` on a server that can be reached directly.
 
-## 3. Security headers already in the application
+## 2. Security headers already in the application
 
 `app/Http/Middleware/SecurityHeaders.php` adds these to every response (§8.2), so they
 apply under Apache, `php artisan serve` or a proxy alike:
@@ -142,7 +103,7 @@ CSS without a nonce. That relaxation happens only when `public/hot` exists, whic
 another reason to delete it on a server. Laravel's debug error page (only with
 `APP_DEBUG=true`) is sent without the policy, because it is built from inline code.
 
-## 4. Secure deployment design (§10)
+## 3. Secure deployment design (§10)
 
 ```
 Public Internet
@@ -177,7 +138,7 @@ MySQL — no public address, no public port
 - **Dependency updates.** The GitHub workflow runs `composer audit` and `pnpm audit` on
   every push; see below.
 
-## 5. Dependency audit (§8.5)
+## 4. Dependency audit (§8.5)
 
 | Command | Result on 15 September 2026 |
 | --- | --- |
@@ -187,7 +148,7 @@ MySQL — no public address, no public port
 The "Dependency audit" job in `.github/workflows/tests.yml` runs both on every push
 and pull request, so a newly published advisory fails the build.
 
-## 6. Load and stress testing the JSON API (§7.3)
+## 5. Load and stress testing the JSON API (§7.3)
 
 `tests/load/recipe-search-api.js` is a k6 script with a `load` scenario (20 steady
 virtual users for two minutes) and a `stress` scenario (ramping to 400, then back to 0
