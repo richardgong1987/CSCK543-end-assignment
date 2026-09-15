@@ -188,21 +188,24 @@ any account you registered by hand, so it is the quickest way back to a known st
 Every URL the application answers is declared in `routes/web.php`. Start there, then
 follow the controller.
 
-| URL                | Who can reach it | Handled by                                        |
-| ------------------ | ---------------- | ------------------------------------------------- |
-| `/`                | anyone           | `HomeController@index`                            |
-| `/recipes`         | anyone           | `RecipeController@index` — the listing and search |
-| `/recipes/{slug}`  | anyone           | `RecipeController@show` — one recipe              |
-| `/register`        | guests           | `Auth\RegisteredUserController`                   |
-| `/login`           | guests           | `Auth\AuthenticatedSessionController`             |
-| `POST /logout`     | signed in        | `Auth\AuthenticatedSessionController@destroy`     |
-| `/dashboard`       | signed in        | `routes/web.php` renders `dashboard.blade.php`    |
+| URL                                | Who can reach it | Handled by                                                      |
+| ---------------------------------- | ---------------- | --------------------------------------------------------------- |
+| `/`                                | anyone           | `HomeController@index`                                          |
+| `/recipes`                         | anyone           | `RecipeController@index` — the listing and search               |
+| `/recipes/{slug}`                  | anyone           | `RecipeController@show` — one recipe                            |
+| `/register`                        | guests           | `Auth\RegisteredUserController`                                 |
+| `/login`                           | guests           | `Auth\AuthenticatedSessionController`                           |
+| `POST /logout`                     | signed in        | `Auth\AuthenticatedSessionController@destroy`                   |
+| `/dashboard`                       | signed in        | `DashboardController@index` — the account page                  |
+| `POST /recipes/{slug}/favourite`   | signed in        | `FavouriteController@store` — save a favourite                  |
+| `DELETE /recipes/{slug}/favourite` | signed in        | `FavouriteController@destroy` — remove a favourite              |
+| `PUT /recipes/{slug}/rating`       | signed in        | `RatingController@update` — create or replace the user's rating |
 
 ### Layout and navigation
 
 | File                                              | What it is                                                                              |
 | ------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `resources/views/components/layouts/app.blade.php` | The shell **every** page uses, the login and registration pages included: skip link, header, nav, `<main>`, footer. The nav shows the app name, a Recipes link, and either Log in / Register or the user's name and a Log out button. The footer carries the copyright line and the module credit. |
+| `resources/views/components/layouts/app.blade.php` | The shell **every** page uses, the login and registration pages included: skip link, header, nav, `<main>`, footer. The nav shows the app name, a Recipes link, and either Log in / Register or a "Your account" link, the user's name and a Log out button. Above each page's content it shows the `status` flash message that actions such as saving a favourite or a rating send back, in a `role="status"` paragraph so screen readers announce it. The footer carries the copyright line and the module credit. |
 | `resources/views/components/layouts/auth.blade.php` | The narrow centred card the auth pages used to use. **Nothing references it any more** — delete it, or move the auth pages back onto it; leaving a second layout that no page opts into only misleads the next reader. |
 
 A page opts into a layout with `<x-layouts.app title="...">`.
@@ -233,7 +236,7 @@ link leads to an empty page.
 | `app/Http/Controllers/RecipeController.php` (`index`) | Hands the query string to `RecipeSearch` and paginates the result. |
 | `resources/views/recipes/index.blade.php`             | The results page: the summary line, the grid of cards, the paging links. |
 | `resources/views/components/recipe-filters.blade.php` | The search and filter form.                                     |
-| `resources/views/components/recipe-card.blade.php`    | One recipe as a card. Shared with the home page.                |
+| `resources/views/components/recipe-card.blade.php`    | One recipe as a card; the whole card links to the recipe. Shared with the home page and the account page. Load recipes for it with `Recipe::withCardDetails()`, or the cards lose their times, labels and rating. |
 | `resources/js/app.js`                                 | Applies the sort menu on change and keeps empty fields out of the URL. Both are conveniences; the form works without JavaScript. |
 
 A search is a plain `GET`, so it is always a shareable URL, for example
@@ -266,12 +269,17 @@ Two things to know before changing this file:
 
 | File                                                  | What it does                                                    |
 | ----------------------------------------------------- | ---------------------------------------------------------------- |
-| `app/Http/Controllers/RecipeController.php` (`show`)   | Loads the recipe with its ingredients, sections, steps and labels. |
-| `resources/views/recipes/show.blade.php`               | Ingredients grouped under their headings, numbered steps with a time each, servings, rating and the BBC Food source link. |
+| `app/Http/Controllers/RecipeController.php` (`show`)   | Loads the recipe with its ingredients, sections, steps and labels, plus the average rating, whether the signed-in user has saved it, and their own rating. |
+| `resources/views/recipes/show.blade.php`               | Ingredients grouped under their headings, numbered steps with a time each, servings, rating, the BBC Food source link, the Save/Remove favourite button and the rating form. Guests see "Log in to save this recipe" and "Log in to rate this recipe" links instead. |
+| `app/Http/Controllers/FavouriteController.php`         | Saves or removes the favourite. Redirects back with a message, or answers JSON (`is_favourite`, `message`) when the request asks for it. |
+| `app/Http/Controllers/RatingController.php`            | Validates and stores the rating: `overall` is required, `taste`, `difficulty` and `appearance` are optional, all whole numbers from 1 to 5 to match the database constraints. A user has one rating per recipe, so rating again replaces it, and a facet left out clears its earlier score. |
 | `app/Models/RecipeIngredient.php` (`displayText()`)    | Turns stored amounts back into a line a cook reads: "3 garlic cloves, crushed". |
 | `app/Support/Duration.php`                             | Formats minutes as "45 mins" or "1 hr 20 mins".                 |
 
 Recipes resolve by `slug`, not by id — see `Recipe::getRouteKeyName()`.
+
+Both forms on the page work as ordinary form submissions. With JavaScript on,
+`favourite-toggle.js` and `star-rating.js` enhance them; see [JavaScript](#javascript).
 
 ### Registration — `/register`
 
@@ -279,7 +287,7 @@ Recipes resolve by `slug`, not by id — see `Recipe::getRouteKeyName()`.
 | ------------------------------------------------------ | -------------------------------------------------------- |
 | `app/Http/Controllers/Auth/RegisteredUserController.php` | Shows the form, validates it, creates the user, signs them in. |
 | `resources/views/auth/register.blade.php`               | Name, email, password and password confirmation.        |
-| `resources/js/register.validation.js`                   | The client-side checks. It is a Vite entry of its own (`vite.config.js`), pulled in by `@vite` at the foot of the register view rather than from the layout — any new page-specific script needs the same entry, or the page breaks once the assets are built. |
+| `resources/js/register.validation.js`                   | The client-side checks for this form; see [JavaScript](#javascript). |
 
 Validation lives in the controller's `store()`: the name is required, the email must
 be well formed and unused, and the password must meet `Password::defaults()` and be
@@ -292,6 +300,7 @@ confirmed. Passwords are hashed by the `hashed` cast on `App\Models\User`.
 | `app/Http/Requests/Auth/LoginRequest.php`                    | Validation, the credential check, and the rate limiting.    |
 | `app/Http/Controllers/Auth/AuthenticatedSessionController.php` | Shows the form, regenerates the session on login, clears it on logout. |
 | `resources/views/auth/login.blade.php`                       | Email, password and "Remember me".                          |
+| `resources/js/login.validation.js`                           | The client-side checks for this form; see [JavaScript](#javascript). |
 
 Five failed attempts a minute, keyed on the email **and** the IP address, lock further
 attempts out — see `LoginRequest::MAX_ATTEMPTS`. The throttle counter is kept in the
@@ -299,8 +308,33 @@ cache, which is why the `cache` table matters (`CACHE_STORE=database`).
 
 ### Account page — `/dashboard`
 
-`resources/views/dashboard.blade.php` is a placeholder that greets the signed-in user.
-Saved recipes and ratings still need to be built on top of it.
+| File                                          | What it does                                                                 |
+| --------------------------------------------- | ---------------------------------------------------------------------------- |
+| `app/Http/Controllers/DashboardController.php` | Loads the signed-in user's saved recipes, most recently saved first, and their ratings with the recipe each one is for. Everything is read through the signed-in user, so nobody sees another user's favourites or ratings. |
+| `resources/views/dashboard.blade.php`          | The user's name, email and join date; the saved recipes as recipe cards; and each rated recipe with the scores given, leaving out the facets the user skipped. |
+
+Editing details, changing the password and deleting the account are not built; see
+[Not built yet](#not-built-yet).
+
+### JavaScript
+
+Every script is progressive enhancement: each page works with JavaScript off, and the
+scripts only make it quicker to use. All of them are imported by `resources/js/app.js`,
+the one script entry the layout loads on every page, so each script first checks that
+its form is on the page and otherwise does nothing.
+
+| File                                                    | What it does                                                        |
+| ------------------------------------------------------- | -------------------------------------------------------------------- |
+| `resources/js/app.js`                                   | The entry point. Also applies the sort menu as soon as it changes and keeps empty fields out of the search URL. |
+| `resources/js/common.js`                                | `setupFormValidation()`, shared by login and registration: checks each field on submit, shows its message and links it to the field with `aria-describedby` and `aria-invalid`, moves focus to the first invalid field, and hides the server's messages from the previous submission once the user starts typing. |
+| `resources/js/register.validation.js`                   | Registration's fields and rules: a name, a well-formed email, a password of at least 8 characters (matching `Password::defaults()`) and a matching confirmation. |
+| `resources/js/login.validation.js`                      | Login's fields and rules: a well-formed email and a non-empty password. |
+| `resources/js/favourite-toggle.js`                      | Sends the Save/Remove favourite form with `fetch()` and flips the button in place, announcing the result to screen readers. Any failure, such as a network error or an expired session, falls back to a normal submit. |
+| `resources/js/star-rating.js`                           | Shows the rating form's 1–5 radio buttons as stars, with a hover preview. The radios stay underneath, visually hidden, so keyboards, screen readers and submission behave as without JavaScript. |
+
+The login and registration forms carry `novalidate`, so these messages replace the
+browser's own. No automated browser tests cover the scripts yet; see
+[End-to-end tests](#testing-proposal-7).
 
 ### The database
 
@@ -323,6 +357,10 @@ Small Blade components used across the forms, all in `resources/views/components
 `input-label`, `text-input`, `select-input`, `checkbox-filter`, `input-error` and
 `primary-button`. Prefer these over writing classes inline, so the forms stay
 consistent.
+
+`input-error` renders a field's server message with the id `{field}-error`. Point the
+field at it with `aria-describedby` while the error exists, as the login and
+registration views do, so a screen reader reads the message with the field.
 
 ### Tests
 
@@ -350,9 +388,8 @@ says what already exists, so nobody redoes work that is done.
 
 | Work                       | Where it stands                                                                                                                                                                          |
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| The account page           | Built: `/dashboard` shows the user's name, email and join date, their saved recipes as recipe cards, and every recipe they have rated with the scores they gave. Still to decide as a group: whether users can edit their details, change their password or delete their account (the last would also answer §9's question of how test accounts get deleted). |
-| **Client-side validation** | Done on `/register` and `/login`. `resources/js/common.js` holds the shared submit-time check (`setupFormValidation`); `register.validation.js` and `login.validation.js` only list each form's fields and rules — name, email, password length (8, matching `Password::defaults()`) and confirmation on register; email and a non-empty password on login. Both forms carry `novalidate`, so JavaScript has replaced the browser's own messages, and typing in a field hides the server's messages from the previous submission. Each error is linked to its field with `aria-describedby` / `aria-invalid` while it is shown, and a failed submit moves focus to the first invalid field. Missing: feedback before submit (on `blur` or `input`). |
-| JavaScript behaviour       | Built, as progressive enhancement: every form still works with JavaScript off. `resources/js/app.js` (the sort menu and keeping empty fields out of the search URL), `common.js` (the shared form-validation setup), `login.validation.js` / `register.validation.js` (each form's fields and rules, described above), `favourite-toggle.js` (saves or removes a favourite with `fetch()` and updates the button in place; `FavouriteController` answers JSON when asked, and any failure falls back to a normal submit) and `star-rating.js` (shows the rating form's 1–5 radio buttons as stars with a hover preview, leaving the radios underneath for keyboards and screen readers). No automated browser tests cover these yet; see End-to-end tests below. |
+| **Client-side validation** | Built for `/register` and `/login`; see [JavaScript](#javascript). Missing: feedback before submit, on `blur` or `input`, rather than only when the form is sent. |
+| Account management         | Not built: editing a name or email, changing the password, deleting the account. The brief does not require them; deleting accounts would also answer §9's question of how test accounts get deleted. Decide as a group whether they are in scope. |
 | Password reset             | Not built. The brief does not require it; our proposal mentions it. Decide as a group whether it is in scope.                                                                             |
 
 #### Quality attributes
