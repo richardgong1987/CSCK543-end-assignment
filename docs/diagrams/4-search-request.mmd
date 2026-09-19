@@ -1,0 +1,27 @@
+---
+title: A recipe search, from click to page
+---
+sequenceDiagram
+    autonumber
+    actor U as Visitor
+    participant B as Chrome
+    participant A as Apache
+    participant L as Laravel<br/>(PHP-FPM)
+    participant S as RecipeSearch
+    participant D as MariaDB
+
+    U->>B: types "pizza", sorts by "Quickest"
+    B->>A: GET /recipes?q=pizza&sort=quickest
+    A->>L: no such file, so index.php (FastCGI)
+    L->>L: middleware: session, CSRF token, security headers
+    L->>S: RecipeController@index hands over the query string
+    S->>S: drop unknown filters, match the sort against SORTS
+    S->>D: queries with bound parameters, related data eager-loaded
+    D-->>S: rows for page 1 (up to 12 recipes) and the total
+    S-->>L: paginated recipes
+    L->>L: render recipes/index.blade.php, nonce in the CSP
+    L-->>A: HTML (Cache-Control: no-cache, private)
+    A-->>B: HTML, gzip-compressed
+    B->>A: CSS, JavaScript, fonts, visible photos
+    A-->>B: static files, cached for a year (photos a week)
+    Note over B,A: Photos further down load only when scrolled to,<br/>and a later visit takes the static files from the cache

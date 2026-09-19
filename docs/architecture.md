@@ -1,7 +1,9 @@
 # How the code is organised
 
 Every URL the application answers is declared in `routes/web.php`, apart from the one
-JSON endpoint in `routes/api.php`. Start there, then follow the controller.
+JSON endpoint in `routes/api.php`. Start there, then follow the controller. For the
+big picture first — how the pieces fit and how a request travels — see the
+[architecture diagrams](architecture-diagrams.md).
 
 | URL                                | Who can reach it | Handled by                                                      |
 | ---------------------------------- | ---------------- | --------------------------------------------------------------- |

@@ -1,0 +1,38 @@
+---
+title: Proposed production deployment — not deployed
+---
+flowchart TB
+    users(["Visitors and API clients"])
+    cdn["<b>CDN</b> — optional<br/>copies of build/ and images/<br/>close to visitors"]
+    admins(["Operators"])
+
+    subgraph public["Public — the only machine with a public address"]
+        proxy["<b>Reverse proxy</b><br/>terminates HTTPS · HTTP/2 · Brotli<br/>port 80 only redirects to 443"]
+    end
+
+    subgraph private["Private network — firewall allows only the arrows shown"]
+        app["<b>Application server</b><br/>Apache or nginx + PHP-FPM 8.5 · Laravel 13<br/>APP_ENV=production · APP_DEBUG=false<br/>config, routes and views cached"]
+        db[("<b>MySQL</b><br/>no public address or port<br/>application account: SELECT, INSERT, UPDATE, DELETE")]
+        backups["Encrypted database backups"]
+        bastion["VPN or bastion host"]
+    end
+
+    smtp["<b>Mail service</b> (SMTP)<br/>password reset emails"]
+
+    users -- "HTTPS 443" --> proxy
+    users -. "static files" .-> cdn -. "on a miss" .-> proxy
+    proxy -- "HTTP, from the proxy only<br/>X-Forwarded-Proto trusted" --> app
+    app -- "3306, from the app only" --> db
+    db --> backups
+    app -- "SMTP over TLS" --> smtp
+    admins --> bastion -.-> app
+    bastion -.-> db
+
+    classDef person fill:#fff4e5,stroke:#b45309,color:#1f2937
+    classDef app fill:#e8f1fb,stroke:#1d4ed8,color:#1f2937
+    classDef data fill:#ecfdf3,stroke:#15803d,color:#1f2937
+    classDef external fill:#f3f4f6,stroke:#6b7280,color:#1f2937,stroke-dasharray:5 3
+    class users,admins person
+    class proxy,app,bastion app
+    class db,backups data
+    class cdn,smtp external

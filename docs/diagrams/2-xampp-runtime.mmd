@@ -1,0 +1,30 @@
+---
+title: Recipe Box on XAMPP — how a request is served
+---
+flowchart TB
+    chrome["<b>Google Chrome</b><br/>HTML · Tailwind CSS · vanilla JavaScript"]
+
+    subgraph machine["One computer running XAMPP — the tested macOS set-up (Linux is the same)"]
+        subgraph apache["XAMPP Apache 2.4 — recipebox.localhost, port 80"]
+            htaccess["<b>public/.htaccess</b><br/>send unknown paths to index.php<br/>gzip text · cache lifetimes"]
+            static["<b>Static files in public/</b><br/>build/ — CSS, JS, fonts (hashed names)<br/>images/ — recipe photos, WebP and JPEG"]
+        end
+        fpm["<b>PHP-FPM 8.5</b> · pool recipebox<br/>runs Laravel 13 through public/index.php<br/>reads .env.xampp"]
+        maria[("<b>XAMPP MariaDB 10.4</b> · port 3307<br/>database csck543<br/>tables, sessions, cache, rate-limit counters")]
+        logs["<b>storage/logs/laravel.log</b><br/>errors, and reset emails<br/>while MAIL_MAILER=log"]
+    end
+
+    chrome -- "HTTP GET / POST" --> htaccess
+    htaccess -- "the file exists" --> static
+    htaccess -- "anything else<br/>FastCGI over a Unix socket" --> fpm
+    fpm -- "SQL over a Unix socket (DB_SOCKET)" --> maria
+    fpm --> logs
+
+    classDef client fill:#fff4e5,stroke:#b45309,color:#1f2937
+    classDef app fill:#e8f1fb,stroke:#1d4ed8,color:#1f2937
+    classDef data fill:#ecfdf3,stroke:#15803d,color:#1f2937
+    classDef files fill:#f5f3ff,stroke:#6d28d9,color:#1f2937
+    class chrome client
+    class htaccess,fpm app
+    class maria data
+    class static,logs files

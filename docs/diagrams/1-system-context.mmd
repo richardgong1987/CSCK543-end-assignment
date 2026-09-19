@@ -1,0 +1,32 @@
+---
+title: Recipe Box — who uses it and what it talks to
+---
+flowchart LR
+    visitor(["<b>Visitor</b><br/>searches and reads recipes,<br/>no account needed"])
+    member(["<b>Registered user</b><br/>also saves and rates recipes<br/>and manages the account"])
+    client(["<b>API client</b><br/>any program, such as<br/>the k6 load test"])
+
+    subgraph system["Recipe Box"]
+        direction TB
+        web["<b>Web application</b><br/>Laravel 13 on PHP 8.5<br/>HTML pages built on the server"]
+        api["<b>JSON search API</b><br/>GET /api/recipes<br/>public, read-only, rate limited"]
+        db[("<b>MySQL / MariaDB</b><br/>recipes, users, favourites,<br/>ratings, sessions")]
+        web --> db
+        api --> db
+    end
+
+    mail["<b>Mail</b><br/>password reset links<br/>(written to the log file in development)"]
+
+    visitor -- "HTTP, in Chrome" --> web
+    member -- "HTTP, logged in" --> web
+    client -- "HTTP, JSON" --> api
+    web -- "reset link" --> mail
+
+    classDef person fill:#fff4e5,stroke:#b45309,color:#1f2937
+    classDef app fill:#e8f1fb,stroke:#1d4ed8,color:#1f2937
+    classDef data fill:#ecfdf3,stroke:#15803d,color:#1f2937
+    classDef external fill:#f3f4f6,stroke:#6b7280,color:#1f2937,stroke-dasharray:5 3
+    class visitor,member,client person
+    class web,api app
+    class db data
+    class mail external

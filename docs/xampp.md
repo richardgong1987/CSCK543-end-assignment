@@ -41,6 +41,9 @@ Chrome ── http://recipebox.localhost ──► XAMPP Apache 2.4 (port 80)
                                                   database "csck543"
 ```
 
+The same picture as a diagram is figure 2 in
+[architecture-diagrams.md](architecture-diagrams.md#2-running-on-xampp).
+
 The choices behind it, each explained in [section 6](#6-problems-we-hit-and-how-we-solved-them):
 
 - **Only this site uses PHP-FPM.** The handler is set inside the Recipe Box virtual

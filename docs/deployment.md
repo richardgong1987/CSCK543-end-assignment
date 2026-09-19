@@ -121,6 +121,10 @@ Laravel application (Apache or nginx + PHP-FPM)
 MySQL — no public address, no public port
 ```
 
+Figure 7 in [architecture-diagrams.md](architecture-diagrams.md#7-production-deployment-proposed)
+draws the same design with the mail service, backups, administrator access and an
+optional CDN.
+
 - **Network segmentation and firewall rules.** The proxy accepts 80 and 443 from
   anywhere; the application server accepts traffic only from the proxy; MySQL accepts
   3306 only from the application server.

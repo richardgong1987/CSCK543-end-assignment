@@ -19,6 +19,7 @@ This file is only the entry point. Everything else lives in [`docs/`](docs):
 | Run it on my own machine while developing                         | [docs/setup.md](docs/setup.md)                     |
 | Run it on XAMPP, the way it is assessed (macOS tested; Linux, Windows) | [docs/xampp.md](docs/xampp.md)                |
 | Run the tests: unit, feature, and end-to-end in Chrome            | [docs/testing.md](docs/testing.md)                 |
+| See the architecture diagrams: system, XAMPP, layers, requests    | [docs/architecture-diagrams.md](docs/architecture-diagrams.md) |
 | Find where a feature lives in the code before I change it         | [docs/architecture.md](docs/architecture.md)       |
 | See the VoiceOver and keyboard-only accessibility testing         | [docs/accessibility.md](docs/accessibility.md)     |
 | See the phone and tablet layout testing                           | [docs/responsive.md](docs/responsive.md)           |

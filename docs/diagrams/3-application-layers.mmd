@@ -1,0 +1,51 @@
+---
+title: Inside the Laravel application — where code goes
+---
+flowchart TB
+    request(["HTTP request"])
+
+    subgraph input["Handling input and output"]
+        direction TB
+        middleware["<b>Middleware</b><br/>session · CSRF token · auth / guest · throttle<br/>SecurityHeaders — CSP with a nonce, HSTS, no framing"]
+        routes["<b>routes/web.php</b> — pages and forms<br/><b>routes/api.php</b> — GET /api/recipes"]
+        controllers["<b>Controllers</b><br/>Home · Recipe · Dashboard · Favourite · Rating<br/>Account · AccountPassword · Auth/* · Api/RecipeSearch<br/>validate the request, call the work, choose the response"]
+    end
+
+    subgraph work["Doing the work"]
+        direction LR
+        search["<b>Services/RecipeSearch</b><br/>allow-lists filters and sort keys,<br/>builds one Eloquent query"]
+        laravel["<b>Laravel services</b><br/>authentication · password broker<br/>hashing · rate limiter · validation"]
+    end
+
+    subgraph data["Talking to the database"]
+        models["<b>Eloquent models</b><br/>Recipe · RecipeIngredient · RecipeIngredientSection · RecipeStep<br/>Ingredient · Unit · Category · DietaryTag · Cuisine · Chef · TimeBand<br/>User · Favourite · Rating"]
+        db[("<b>MySQL / MariaDB</b>")]
+        models --> db
+    end
+
+    subgraph output["Responses"]
+        direction LR
+        blade["<b>Blade views and components</b><br/>layouts.app · recipe-card · recipe-image<br/>recipe-filters · form inputs"]
+        resource["<b>RecipeResource</b><br/>recipes as JSON"]
+    end
+
+    browserjs["<b>resources/js</b> in the browser<br/>form checks · star rating · favourite toggle<br/>progressive enhancement only"]
+
+    request --> middleware --> routes --> controllers
+    controllers --> search
+    controllers --> laravel
+    controllers -- "simple reads and writes" --> models
+    search --> models
+    laravel --> models
+    controllers --> blade
+    controllers --> resource
+    blade -. "HTML loads" .-> browserjs
+
+    classDef edge fill:#fff4e5,stroke:#b45309,color:#1f2937
+    classDef app fill:#e8f1fb,stroke:#1d4ed8,color:#1f2937
+    classDef data fill:#ecfdf3,stroke:#15803d,color:#1f2937
+    classDef view fill:#f5f3ff,stroke:#6d28d9,color:#1f2937
+    class request,browserjs edge
+    class middleware,routes,controllers,search,laravel app
+    class models,db data
+    class blade,resource view
