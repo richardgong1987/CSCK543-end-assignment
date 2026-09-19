@@ -48,22 +48,17 @@ older Apache versions do not know. On nginx, set `gzip on;` with the same `gzip_
 
 ### Caching the built assets
 
-Lighthouse flags that assets arrive without caching headers (PHP's built-in server sends
-none). Every file Vite writes to `public/build` has a content hash in its name, so it can
-be cached for a year: a changed file gets a new name. Recipe images keep their names, so
-give them a shorter lifetime. With `mod_headers` enabled, in the virtual host:
+`public/.htaccess` also sets how long browsers keep static files
+([sustainability.md](sustainability.md#3-what-was-changed)). Every file Vite writes to
+`public/build/assets` has a content hash in its name, so it is cached for a year: a
+changed file gets a new name. Recipe photos keep their names, so they are cached for a
+week. It needs `mod_headers`, which XAMPP loads by default; on Debian or Ubuntu, run
+`sudo a2enmod headers`. PHP's built-in server (`php artisan serve`) ignores `.htaccess`,
+so these headers appear only under Apache.
 
-```apache
-<Directory "C:/xampp/htdocs/CSCK543-end-assignment/public/build">
-    Header set Cache-Control "public, max-age=31536000, immutable"
-</Directory>
-<Directory "C:/xampp/htdocs/CSCK543-end-assignment/public/images">
-    Header set Cache-Control "public, max-age=604800"
-</Directory>
-```
-
-Put this in the virtual host rather than a `.htaccess` inside `public/build`, because
-every `pnpm run build` empties that folder.
+A CDN in front of the site can reuse the same lifetimes; see
+[sustainability.md](sustainability.md#4-recommended-for-production-not-done-here) for
+when one is worth it.
 
 ### Least-privilege database accounts
 

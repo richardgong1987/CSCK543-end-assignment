@@ -74,7 +74,7 @@ Measured on 19 September 2026, after the fixes in section 3. Every criterion is 
 | PC4 Blocking time ≤ 200 ms | 0 ms | 0 ms | 0 ms | 0 ms | ✓ |
 | PC5 Accessibility ≥ 95 | 100 | 100 | 100 | 100 | ✓ |
 | PC6 Total ≤ 1,000 KiB | 155 | 266 | 108 | 76 | ✓ |
-| PC7 JavaScript ≤ 50 KiB | 5 | 5 | 5 | 5 | ✓ |
+| PC7 JavaScript ≤ 50 KiB | 5 | 5 | 5 | 5 | ✓ (2 KiB since a later fix, see below) |
 | PC8 CSS ≤ 30 KiB | 14 | 14 | 14 | 14 | ✓ |
 | PC9 Fonts ≤ 60 KiB | 51 | 51 | 51 | 51 | ✓ |
 | PC10 Any image ≤ 200 KiB | 33 | 33 | 30 | no images | ✓ |
@@ -124,8 +124,14 @@ Server response times stayed far inside their limit: the 95th percentiles moved 
 ms, about as much as they vary between two runs anyway ([before](evidence/performance/server-response-times-before.txt),
 [after](evidence/performance/server-response-times.txt)).
 
-Caching the built assets for a year ([deployment.md](deployment.md#caching-the-built-assets))
-makes every visit after the first much faster still, but does not change these
+The JavaScript was still sent uncompressed in these runs: XAMPP labels `.js` files with
+the old type `application/x-javascript`, which the compression rule did not list at the
+time. Adding it later cut the file from 4.8 to 1.7 KiB
+([sustainability.md](sustainability.md#3-what-was-changed)).
+
+Browsers now also keep the built files for a year and the photos for a week, so a
+repeat visit downloads only the page itself
+([sustainability.md](sustainability.md#3-what-was-changed)). That does not change these
 first-visit measurements.
 
 ### Adding a recipe photo

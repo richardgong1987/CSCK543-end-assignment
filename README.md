@@ -24,6 +24,7 @@ This file is only the entry point. Everything else lives in [`docs/`](docs):
 | See the phone and tablet layout testing                           | [docs/responsive.md](docs/responsive.md)           |
 | See the load and stress test results                              | [docs/load-testing.md](docs/load-testing.md)       |
 | See the performance targets and whether we meet them             | [docs/performance.md](docs/performance.md)         |
+| See the web sustainability targets, carbon per page and caching  | [docs/sustainability.md](docs/sustainability.md)   |
 | Understand the database schema and why it is shaped that way      | [docs/database-design.md](docs/database-design.md) |
 | See what is finished and what is still open against the brief     | [docs/status.md](docs/status.md)                   |
 | Configure it for production, or write up deployment for the report | [docs/deployment.md](docs/deployment.md)          |
