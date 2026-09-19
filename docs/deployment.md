@@ -38,6 +38,14 @@ php artisan view:cache
 `config:cache` freezes `.env` into a cached file, so run it again after any change to
 `.env`.
 
+### Compression
+
+`public/.htaccess` compresses HTML, CSS, JavaScript and JSON, which cuts the stylesheet
+from 66 to 14 KiB ([performance.md](performance.md#3-what-was-fixed)). It needs Apache's
+`mod_deflate`, which XAMPP loads by default; on Debian or Ubuntu, run
+`sudo a2enmod deflate`. The same file declares the WebP type for the recipe photos, which
+older Apache versions do not know. On nginx, set `gzip on;` with the same `gzip_types`.
+
 ### Caching the built assets
 
 Lighthouse flags that assets arrive without caching headers (PHP's built-in server sends

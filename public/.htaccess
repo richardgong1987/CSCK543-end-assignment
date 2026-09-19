@@ -23,3 +23,14 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# XAMPP's list of file types predates WebP, so recipe photos would be sent without one.
+<IfModule mod_mime.c>
+    AddType image/webp .webp
+</IfModule>
+
+# Compress text responses: the stylesheet shrinks from 66 KiB to about 13 KiB
+# (docs/performance.md, PC8). Images and fonts are already compressed formats.
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>

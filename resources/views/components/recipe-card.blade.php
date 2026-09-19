@@ -16,15 +16,15 @@
      after the recipe, not the full card text. --}}
 <article class="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg bg-white shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] outline-offset-2 transition-shadow hover:shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.4)] has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-[#1b1b18] dark:bg-[#161615] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] dark:hover:shadow-[inset_0px_0px_0px_1px_#fffaed66] dark:has-[a:focus-visible]:outline-[#EDEDEC]">
     @if ($recipe->image_path)
-        <img
-            src="{{ asset($recipe->image_path) }}"
+        {{-- Two columns from 640 px wide, so a card is never wider than 404 px there. --}}
+        <x-recipe-image
+            :path="$recipe->image_path"
+            sizes="(min-width: 640px) 404px, calc(100vw - 48px)"
             alt="{{ $recipe->title }}"
-            width="832"
-            height="468"
-            loading="{{ $prioritiseImage ? 'eager' : 'lazy' }}"
-            @if ($prioritiseImage) fetchpriority="high" @endif
+            :loading="$prioritiseImage ? 'eager' : 'lazy'"
+            :fetchpriority="$prioritiseImage ? 'high' : null"
             class="aspect-video w-full object-cover"
-        >
+        />
     @endif
 
     <div class="flex flex-1 flex-col gap-3 p-5">

@@ -56,3 +56,30 @@ it('resolves a recipe by its slug rather than its id', function () {
 
     expect(route('recipes.show', $recipe))->toContain($recipe->slug);
 });
+
+it('serves the recipe photo as WebP copies sized for the screen', function () {
+    $recipe = Recipe::where('slug', 'healthy-pizza')->sole();
+
+    $this->get(route('recipes.show', $recipe))
+        ->assertSee(
+            'srcset="'.asset('images/recipes/healthy-pizza-416.webp').' 416w, '
+                .asset('images/recipes/healthy-pizza-640.webp').' 640w, '
+                .asset('images/recipes/healthy-pizza-832.webp').' 832w"',
+            escape: false,
+        );
+});
+
+it('has a WebP copy in every width for every recipe photo', function () {
+    foreach (Recipe::pluck('image_path') as $imagePath) {
+        foreach ([416, 640, 832] as $width) {
+            expect(public_path(str_replace('.jpg', "-{$width}.webp", $imagePath)))->toBeFile();
+        }
+    }
+});
+
+it('loads only the first photo of the listing straight away', function () {
+    $html = $this->get(route('recipes.index'))->getContent();
+
+    expect(substr_count($html, 'fetchpriority="high"'))->toBe(1)
+        ->and(substr_count($html, 'loading="lazy"'))->toBe(7);
+});

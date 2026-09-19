@@ -1,0 +1,6 @@
+/                                    median   32 ms  p95   46 ms  max   49 ms
+/recipes                             median   15 ms  p95   38 ms  max   38 ms
+/recipes/healthy-pizza               median   34 ms  p95   51 ms  max   51 ms
+/login                               median   16 ms  p95   20 ms  max   23 ms
+/recipes?q=pizza&sort=quickest       median   39 ms  p95   49 ms  max   50 ms
+/api/recipes?q=pizza&sort=quickest   median   38 ms  p95   49 ms  max   55 ms

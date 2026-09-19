@@ -62,6 +62,7 @@ link leads to an empty page.
 | `resources/views/recipes/index.blade.php`             | The results page: the summary line, the grid of cards, the paging links. |
 | `resources/views/components/recipe-filters.blade.php` | The search and filter form.                                     |
 | `resources/views/components/recipe-card.blade.php`    | One recipe as a card; the whole card links to the recipe. Shared with the home page and the account page. Load recipes for it with `Recipe::withCardDetails()`, or the cards lose their times, labels and rating. |
+| `resources/views/components/recipe-image.blade.php`   | A recipe photo as an `<img>` with its WebP copies in a `srcset`. Each JPEG in `public/images/recipes` needs copies 416, 640 and 832 px wide beside it; [performance.md](performance.md#adding-a-recipe-photo) shows how to make them. |
 | `resources/js/app.js`                                 | Applies the sort menu on change and keeps empty fields out of the URL. Both are conveniences; the form works without JavaScript. |
 
 A search is a plain `GET`, so it is always a shareable URL, for example
