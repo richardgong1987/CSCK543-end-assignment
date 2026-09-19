@@ -1,0 +1,38 @@
+█ THRESHOLDS 
+
+    http_req_duration
+    ✓ 'p(95)<500' p(95)=36.08ms
+
+    http_req_failed
+    ✗ 'rate<0.01' rate=29.49%
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 179056 1491.717045/s
+    checks_succeeded...: 70.50% 126236 out of 179056
+    checks_failed......: 29.49% 52820 out of 179056
+
+    ✗ status is 200
+      ↳  70% — ✓ 63118 / ✗ 26410
+    ✗ body has a data array
+      ↳  70% — ✓ 63118 / ✗ 26410
+
+    HTTP
+    http_req_duration..............: avg=23.11ms min=0s       med=27.94ms max=3.14s p(90)=32.72ms p(95)=36.08ms
+      { expected_response:true }...: avg=31.52ms min=6.42ms   med=29.26ms max=3.14s p(90)=33.89ms p(95)=39.09ms
+    http_req_failed................: 29.49% 26410 out of 89528
+    http_reqs......................: 89528  745.858522/s
+
+    EXECUTION
+    iteration_duration.............: avg=26.79ms min=841.29µs med=28.07ms max=3.14s p(90)=32.88ms p(95)=36.25ms
+    iterations.....................: 89528  745.858522/s
+    vus............................: 20     min=20             max=20
+    vus_max........................: 20     min=20             max=20
+
+    NETWORK
+    data_received..................: 239 MB 2.0 MB/s
+    data_sent......................: 7.9 MB 66 kB/s
+
+running (2m00.0s), 00/20 VUs, 89528 complete and 0 interrupted iterations
+load ✓ [ 100% ] 20 VUs  2m0s
+time="2026-09-19T21:27:58+09:00" level=error msg="thresholds on metrics 'http_req_failed' have been crossed"

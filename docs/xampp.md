@@ -161,10 +161,15 @@ DB_PORT=3307
 DB_DATABASE=csck543
 DB_USERNAME=root
 DB_PASSWORD=
+# Talk to MariaDB through its socket file rather than TCP (see problem 6.14).
+DB_SOCKET=/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock
 
 # Always serve public/build, even while a Vite dev server has written public/hot.
 VITE_HOT_FILE=storage/framework/xampp-has-no-hot-file
 ```
+
+On Linux the socket is `/opt/lampp/var/mysql/mysql.sock`. While `DB_SOCKET` is set,
+Laravel uses it and ignores `DB_HOST` and `DB_PORT`.
 
 Remove any other `APP_ENV`, `APP_URL` or `DB_…` lines, so each setting appears once.
 Use `DB_CONNECTION=mysql`, not `mariadb`: the ratings table adds its 1–5 score checks
@@ -387,6 +392,7 @@ designed around it.
 | 6.11 | PHP-FPM's default port 9000 was shared: PhpStorm listened on `*:9000` next to PHP-FPM on `127.0.0.1:9000` | 9000 is also the traditional debugger (Xdebug) port. If PHP-FPM stopped, Apache's requests would reach PhpStorm and fail in confusing ways | A separate `recipebox` pool on a Unix socket (3.3); the default pool on 9000 is left alone | Hit |
 | 6.12 | Pages load without any styling or JavaScript | A Vite dev server (`composer run dev`) writes `public/hot`, and while it exists Laravel loads assets from the dev server | `VITE_HOT_FILE` in `.env.xampp` points at a file that never exists, so the XAMPP site always uses `public/build` (3.5); run `pnpm run build` after front-end changes | Avoided |
 | 6.13 | It is hard to tell whether PHP-FPM is being used at all | Apache and PHP-FPM log separately | `access.log` in the pool (3.3) records each request PHP-FPM handles | Hit |
+| 6.14 | Under load, "500 Server Error" with `SQLSTATE[HY000] [2002] Can't assign requested address` in `laravel.log` | Each request opened a new TCP connection to MariaDB; closed connections hold their port for about 30 seconds, and at hundreds of requests a second the machine ran out of ports | `DB_SOCKET` in `.env.xampp` (3.5): the socket file uses no network ports. Found by the load test, see [load-testing.md](load-testing.md) | Hit |
 
 ### Where to look when something else goes wrong
 

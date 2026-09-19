@@ -152,8 +152,9 @@ and pull request, so a newly published advisory fails the build.
 
 `tests/load/recipe-search-api.js` is a k6 script with a `load` scenario (20 steady
 virtual users for two minutes) and a `stress` scenario (ramping to 400, then back to 0
-to watch recovery). It has **not been run yet** — k6 was not installed on the machine
-that wrote it. To run it, on a local copy only:
+to watch recovery). **It was run on 19 September 2026; the results, and the capacity
+recommendations for a production server, are in [load-testing.md](load-testing.md).** To
+run it again, on a local copy only:
 
 ```sh
 API_RECIPE_SEARCH_PER_MINUTE=1000000 php artisan serve
