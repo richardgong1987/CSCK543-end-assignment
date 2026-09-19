@@ -108,9 +108,6 @@ What happened, in 15-second windows (response times are for successful requests 
 | 270 s | 203 | 4,387 | 92.2 % | 343 | 451 ms | 2,319 ms |
 | 285 s | 95 | 546 | 0.0 % | 546 | 93 ms | 170 ms |
 
-The full timeline is in
-[`evidence/load-testing/stress-timeline-15s.json`](evidence/load-testing/stress-timeline-15s.json).
-
 ### What the numbers show
 
 - **Throughput ceiling: about 530–550 successful requests a second**, whatever the
@@ -182,13 +179,10 @@ the database counts unchanged, and no errors in Laravel's log.
 ![D.7](images/load-testing/k6-load-run1-before-fix-overview.png)
 **Figure D.7** — Run 1's HTML report.
 
-The complete k6 reports are also kept as images
-([run 1](images/load-testing/k6-load-run1-before-fix.png),
+The complete k6 reports, as full-page images:
+[run 1](images/load-testing/k6-load-run1-before-fix.png),
 [run 2](images/load-testing/k6-load-run2.png),
-[stress](images/load-testing/k6-stress.png)) and as interactive HTML files that open in
-any browser: [run 1](evidence/load-testing/load-run1-before-fix-report.html),
-[run 2](evidence/load-testing/load-run2-report.html),
-[stress](evidence/load-testing/stress-report.html).
+[stress](images/load-testing/k6-stress.png).
 
 ## 7. Problems during testing and how we solved them
 
@@ -197,7 +191,7 @@ any browser: [run 1](evidence/load-testing/load-run1-before-fix-report.html),
 | L1 | Without changes, nearly every request would get 429 Too Many Requests | The API allows 60 requests a minute per IP, and every k6 request comes from one IP | Raise `API_RECIPE_SEARCH_PER_MINUTE` in `.env.xampp` for the test only, then remove it (done, and checked) |
 | L2 | 29 % of requests failed at only 20 users (run 1) | One database TCP connection per request exhausted the machine's ports | Connect to MariaDB through its socket file (section 2) |
 | L3 | k6 cannot reach `recipebox.localhost` reliably | That name is resolved specially by browsers and curl, not by every program | Target the Mac's own address, `192.168.2.100`, which the virtual host also answers |
-| L4 | The raw results were too large to keep: 83–813 MB of per-request data, and terminal logs of 20–64 MB | k6 records every request, and its live progress display fills the log | Keep k6's summaries, the HTML reports and a 15-second timeline computed from the raw data; leave the raw files out of the repository |
+| L4 | The raw results were too large to keep: 83–813 MB of per-request data, and terminal logs of 20–64 MB | k6 records every request, and its live progress display fills the log | Keep screenshots of k6's summaries and HTML reports, and the 15-second timeline in section 4; leave the raw files out of the repository |
 
 ## 8. Limitations
 

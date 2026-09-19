@@ -159,14 +159,6 @@ both from the address alone. Check again after adding pages, photos, fonts or sc
 | ![F.1](images/sustainability/cache-before.png) **F.1** Before: Lighthouse on the listing, no cache lifetime on any file | ![F.2](images/sustainability/cache-after.png) **F.2** After: built files cached for a year; only the photos (a week) are listed |
 | ![F.3](images/sustainability/dark-mode-home.jpg) **F.3** Home page in dark mode on a phone | ![F.4](images/sustainability/dark-mode-recipe.jpg) **F.4** Recipe page in dark mode |
 
-[`evidence/sustainability/measurements.txt`](evidence/sustainability/measurements.txt)
-lists every file each page transferred — as loaded, after scrolling and on a repeat
-visit — with the CO2e of each view, and the lines Apache logged during each repeat
-visit. The full Lighthouse report of the listing with caching is
-[`evidence/sustainability/lighthouse-recipes-with-caching.html`](evidence/sustainability/lighthouse-recipes-with-caching.html);
-the reports of all four pages, before caching, are with the
-[performance evidence](performance.md#5-evidence).
-
 ## 7. Sign-off
 
 The group agrees these criteria as the project's sustainability targets, with any

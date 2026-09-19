@@ -32,10 +32,7 @@ document.
 | — | Secure deployment | [docs/deployment.md](docs/deployment.md) | Production settings, security headers, the network design (§10) and the dependency audit | — |
 | — | Automated tests | [docs/testing.md](docs/testing.md) | The unit, feature and end-to-end tests, and how to run them | — |
 
-All tests were run on 19 September 2026, against the XAMPP copy of the site. Beyond the
-screenshots, the load-testing, performance and sustainability documents keep their raw
-results in `docs/evidence/<topic>/`: the full k6 and Lighthouse reports (they open in
-any browser), server timings, and the sustainability measurements.
+All tests were run on 19 September 2026, against the XAMPP copy of the site.
 
 **Still needs the group before submission** — each document says exactly what to do:
 

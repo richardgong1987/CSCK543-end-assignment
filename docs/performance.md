@@ -121,8 +121,7 @@ fixed once for the whole site:
 | **Smaller, modern images** | Every screen got the full-size 832 px JPEG, up to 99 KiB, and a recipe photo is the largest element on the home, listing and recipe pages. | Each photo has WebP copies 416, 640 and 832 px wide beside the JPEG. The `x-recipe-image` component prints them as a `srcset`, with a `sizes` hint, so the browser downloads the smallest copy that fits. The recipe page's and the home page's main photo also load with high priority, as the first card on the listing already did. The JPEGs stay, because the JSON API's `image_url` returns them. | Largest image 99 → 33 KiB; Largest Contentful Paint 2.7–4.1 s → 1.7–1.8 s |
 
 Server response times stayed far inside their limit: the 95th percentiles moved by 2–15
-ms, about as much as they vary between two runs anyway ([before](evidence/performance/server-response-times-before.txt),
-[after](evidence/performance/server-response-times.txt)).
+ms, about as much as they vary between two runs anyway.
 
 The JavaScript was still sent uncompressed in these runs: XAMPP labels `.js` files with
 the old type `application/x-javascript`, which the compression rule did not list at the
@@ -172,17 +171,7 @@ Before the fixes:
 | ![E.5](images/performance/lighthouse-home-before.png) **E.5** Home | ![E.6](images/performance/lighthouse-recipes-before.png) **E.6** Recipe listing |
 | ![E.7](images/performance/lighthouse-recipes-healthy-pizza-before.png) **E.7** Recipe page | ![E.8](images/performance/lighthouse-login-before.png) **E.8** Login |
 
-The complete Lighthouse reports open in any browser. After:
-[home](evidence/performance/lighthouse-home.html),
-[listing](evidence/performance/lighthouse-recipes.html),
-[recipe](evidence/performance/lighthouse-recipes-healthy-pizza.html),
-[login](evidence/performance/lighthouse-login.html). Before:
-[home](evidence/performance/lighthouse-home-before.html),
-[listing](evidence/performance/lighthouse-recipes-before.html),
-[recipe](evidence/performance/lighthouse-recipes-healthy-pizza-before.html),
-[login](evidence/performance/lighthouse-login-before.html). The server timings are in
-[`evidence/performance/`](evidence/performance), and the load-test evidence in
-[load-testing.md](load-testing.md#6-evidence).
+The load-test figures are in [load-testing.md](load-testing.md#6-evidence).
 
 ## 6. Sign-off
 
