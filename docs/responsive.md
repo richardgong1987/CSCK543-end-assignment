@@ -27,9 +27,6 @@ in [status.md](status.md#quality-attributes).
   results, a recipe, login, registration with its errors showing, the privacy notice,
   the account page, account settings, and the rating form.
 
-The script is kept in [`evidence/responsive/scripts/`](evidence/responsive/scripts) and
-the raw measurements in [`evidence/responsive/`](evidence/responsive).
-
 ## 2. Results
 
 Width is the page's layout width in CSS pixels; overflow is how far the page is wider
@@ -131,5 +128,3 @@ The screenshots go in [`images/responsive/real-devices/`](images/responsive/real
 | --- | --- |
 | [`images/responsive/`](images/responsive) | 27 emulator screenshots (C.1–C.12 are a selection) |
 | [`images/responsive/real-devices/`](images/responsive/real-devices) | Screenshots from real devices (section 5) |
-| [`evidence/responsive/`](evidence/responsive) | Per-page measurements: layout width, overflow, pixel ratio, browser |
-| [`evidence/responsive/scripts/`](evidence/responsive/scripts) | The script that took the measurements and screenshots |

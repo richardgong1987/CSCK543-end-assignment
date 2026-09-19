@@ -65,7 +65,7 @@ script are downloaded once and then reused.
 | # | Measured | Result |
 | --- | --- | --- |
 | WS1 Carbon ≤ 0.040 g per view | 0.011–0.029 g as loaded (table above) | ✓ |
-| WS2 Browser caching | Built files cached for a year, photos for a week; on a repeat visit Apache logs one request, the page ([E.1](#6-evidence), [E.2](#6-evidence)) | ✓ after the fix |
+| WS2 Browser caching | Built files cached for a year, photos for a week; on a repeat visit Apache logs one request, the page ([F.1](#6-evidence), [F.2](#6-evidence)) | ✓ after the fix |
 | WS3 Compression | Every text response is gzip-compressed: the stylesheet 66 → 14 KiB, the JavaScript 4.8 → 1.7 KiB, each page's HTML 15–58 → 4–8 KiB | ✓ after the fix |
 | WS4 Minified, no unused code | Lighthouse's four checks pass on all four pages; Vite minifies the CSS and JavaScript, and Tailwind builds only the classes the templates use | ✓ |
 | WS5 Images | WebP in three widths with `srcset`; Lighthouse's image delivery check passes on all four pages. Largest photo sent: 33 KiB (the JPEGs were up to 99 KiB) | ✓ |
@@ -73,7 +73,7 @@ script are downloaded once and then reused.
 | WS7 Fonts | Instrument Sans, three weights, WOFF2 only, served by the site: 51 KiB | ✓ |
 | WS8 Third parties | Every request goes to the site itself (Lighthouse's third-party check passes); the Content Security Policy blocks anything else | ✓ |
 | WS9 Animation and media | No video, carousel or looping animation; the only motion is a card's outline darkening on hover | ✓ |
-| WS10 Device preferences | The whole site switches to dark colours with the device's dark mode ([E.3](#6-evidence), [E.4](#6-evidence)) | ✓ |
+| WS10 Device preferences | The whole site switches to dark colours with the device's dark mode ([F.3](#6-evidence), [F.4](#6-evidence)) | ✓ |
 | WS11 Dependencies | No front-end framework; 2 KiB of JavaScript; `composer audit` and `pnpm audit` run on every push | ✓ |
 | WS12 Database work | Query budgets and the N+1 guard pass ([performance.md](performance.md), PC17–PC18); searches return 12 results a page, in the browser and in the API | ✓ |
 
@@ -156,8 +156,8 @@ both from the address alone. Check again after adding pages, photos, fonts or sc
 
 | | |
 | --- | --- |
-| ![E.1](images/sustainability/cache-before.png) **E.1** Before: Lighthouse on the listing, no cache lifetime on any file | ![E.2](images/sustainability/cache-after.png) **E.2** After: built files cached for a year; only the photos (a week) are listed |
-| ![E.3](images/sustainability/dark-mode-home.jpg) **E.3** Home page in dark mode on a phone | ![E.4](images/sustainability/dark-mode-recipe.jpg) **E.4** Recipe page in dark mode |
+| ![F.1](images/sustainability/cache-before.png) **F.1** Before: Lighthouse on the listing, no cache lifetime on any file | ![F.2](images/sustainability/cache-after.png) **F.2** After: built files cached for a year; only the photos (a week) are listed |
+| ![F.3](images/sustainability/dark-mode-home.jpg) **F.3** Home page in dark mode on a phone | ![F.4](images/sustainability/dark-mode-recipe.jpg) **F.4** Recipe page in dark mode |
 
 [`evidence/sustainability/measurements.txt`](evidence/sustainability/measurements.txt)
 lists every file each page transferred — as loaded, after scrolling and on a repeat

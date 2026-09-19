@@ -18,14 +18,9 @@ contrast audits recorded in [status.md](status.md#quality-attributes).
 
 | Part | How | Evidence |
 | --- | --- | --- |
-| **A. VoiceOver** | The real VoiceOver, driven by a script. Keys were sent at operating-system level through macOS System Events, exactly as a keyboard sends them, and after every key the script read back what VoiceOver had just said (VoiceOver's own `content of last phrase`, through AppleScript). VoiceOver kept its default settings. | [Section 2](#2-voiceover-results), transcripts in [`evidence/accessibility/voiceover/`](evidence/accessibility/voiceover) |
-| **B. Keyboard only, scripted** | A Playwright script used only Tab, Enter, Space, arrow keys and typing on the page, took a screenshot at every step, and recorded the focused element's role and name as Chrome's accessibility tree reports them to screen readers. | [Section 3](#3-keyboard-only-results-scripted), [`evidence/accessibility/keyboard-steps.json`](evidence/accessibility/keyboard-steps.json) |
-| **C. Accessibility tree** | The roles and names Chrome gives screen readers for nine pages and states, saved as text. | [`evidence/accessibility/accessibility-tree/`](evidence/accessibility/accessibility-tree) |
-| **D. Keyboard only, by a person** | A checklist for a person to complete and sign. | [Section 5](#5-keyboard-only-check-by-a-person) |
-
-The scripts that produced A and B are kept in
-[`evidence/accessibility/scripts/`](evidence/accessibility/scripts) so the method can be
-checked and repeated.
+| **A. VoiceOver** | The real VoiceOver, driven by a script. Keys were sent at operating-system level through macOS System Events, exactly as a keyboard sends them, and after every key the script read back what VoiceOver had just said (VoiceOver's own `content of last phrase`, through AppleScript). VoiceOver kept its default settings. | [Section 2](#2-voiceover-results), transcript in Figure B.1 |
+| **B. Keyboard only, scripted** | A Playwright script used only Tab, Enter, Space, arrow keys and typing on the page, took a screenshot at every step, and recorded the focused element's role and name as Chrome's accessibility tree reports them to screen readers. | [Section 3](#3-keyboard-only-results-scripted), a screenshot of every step (Figures B.7–B.21) |
+| **C. Keyboard only, by a person** | A checklist for a person to complete and sign. | [Section 5](#5-keyboard-only-check-by-a-person) |
 
 ## 2. VoiceOver results
 
@@ -144,7 +139,3 @@ For anyone repeating the VoiceOver pass on a Mac:
 | Path | Contents |
 | --- | --- |
 | [`images/accessibility/`](images/accessibility) | The VoiceOver transcript (B.1), the page at the end of each VoiceOver scenario (B.2–B.6), and a screenshot of every keyboard step (B.7–B.21) |
-| [`evidence/accessibility/voiceover/`](evidence/accessibility/voiceover) | The VoiceOver transcripts as text, one file per scenario |
-| [`evidence/accessibility/keyboard-steps.json`](evidence/accessibility/keyboard-steps.json) | Every keyboard step: keys, focused element, screenshot |
-| [`evidence/accessibility/accessibility-tree/`](evidence/accessibility/accessibility-tree) | Chrome's accessibility tree for nine pages and states |
-| [`evidence/accessibility/scripts/`](evidence/accessibility/scripts) | The scripts that produced the evidence |
