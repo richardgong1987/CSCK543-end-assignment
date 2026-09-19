@@ -21,6 +21,7 @@ This file is only the entry point. Everything else lives in [`docs/`](docs):
 | Run the tests: unit, feature, and end-to-end in Chrome            | [docs/testing.md](docs/testing.md)                 |
 | Find where a feature lives in the code before I change it         | [docs/architecture.md](docs/architecture.md)       |
 | See the VoiceOver and keyboard-only accessibility testing         | [docs/accessibility.md](docs/accessibility.md)     |
+| See the phone and tablet layout testing                           | [docs/responsive.md](docs/responsive.md)           |
 | Understand the database schema and why it is shaped that way      | [docs/database-design.md](docs/database-design.md) |
 | See what is finished and what is still open against the brief     | [docs/status.md](docs/status.md)                   |
 | Configure it for production, or write up deployment for the report | [docs/deployment.md](docs/deployment.md)          |

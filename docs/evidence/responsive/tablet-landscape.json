@@ -1,0 +1,110 @@
+[
+  {
+    "device": "tablet",
+    "orientation": "landscape",
+    "page": "/",
+    "screenshot": "tablet-landscape-home.png",
+    "cssWidth": 1280,
+    "pageWidth": 1280,
+    "devicePixelRatio": 2,
+    "horizontalOverflowPx": 0,
+    "offenders": [],
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+  },
+  {
+    "device": "tablet",
+    "orientation": "landscape",
+    "page": "/recipes?q=a",
+    "screenshot": "tablet-landscape-search-results.png",
+    "cssWidth": 1280,
+    "pageWidth": 1280,
+    "devicePixelRatio": 2,
+    "horizontalOverflowPx": 0,
+    "offenders": [],
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+  },
+  {
+    "device": "tablet",
+    "orientation": "landscape",
+    "page": "/recipes/healthy-pizza",
+    "screenshot": "tablet-landscape-recipe.png",
+    "cssWidth": 1280,
+    "pageWidth": 1280,
+    "devicePixelRatio": 2,
+    "horizontalOverflowPx": 0,
+    "offenders": [],
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+  },
+  {
+    "device": "tablet",
+    "orientation": "landscape",
+    "page": "/login",
+    "screenshot": "tablet-landscape-login.png",
+    "cssWidth": 1280,
+    "pageWidth": 1280,
+    "devicePixelRatio": 2,
+    "horizontalOverflowPx": 0,
+    "offenders": [],
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+  },
+  {
+    "device": "tablet",
+    "orientation": "landscape",
+    "page": "/register",
+    "screenshot": "tablet-landscape-register-errors.png",
+    "cssWidth": 1280,
+    "pageWidth": 1280,
+    "devicePixelRatio": 2,
+    "horizontalOverflowPx": 0,
+    "offenders": [],
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+  },
+  {
+    "device": "tablet",
+    "orientation": "landscape",
+    "page": "/privacy",
+    "screenshot": "tablet-landscape-privacy.png",
+    "cssWidth": 1280,
+    "pageWidth": 1280,
+    "devicePixelRatio": 2,
+    "horizontalOverflowPx": 0,
+    "offenders": [],
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+  },
+  {
+    "device": "tablet",
+    "orientation": "landscape",
+    "page": "/dashboard",
+    "screenshot": "tablet-landscape-account.png",
+    "cssWidth": 1280,
+    "pageWidth": 1280,
+    "devicePixelRatio": 2,
+    "horizontalOverflowPx": 0,
+    "offenders": [],
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+  },
+  {
+    "device": "tablet",
+    "orientation": "landscape",
+    "page": "/account",
+    "screenshot": "tablet-landscape-account-settings.png",
+    "cssWidth": 1280,
+    "pageWidth": 1280,
+    "devicePixelRatio": 2,
+    "horizontalOverflowPx": 0,
+    "offenders": [],
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+  },
+  {
+    "device": "tablet",
+    "orientation": "landscape",
+    "page": "/recipes/healthy-pizza",
+    "screenshot": "tablet-landscape-rating-form.png",
+    "cssWidth": 1280,
+    "pageWidth": 1280,
+    "devicePixelRatio": 2,
+    "horizontalOverflowPx": 0,
+    "offenders": [],
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+  }
+]
