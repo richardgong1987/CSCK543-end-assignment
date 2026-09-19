@@ -1,0 +1,5 @@
+Recipe page (signed in): Tab to the favourite button, Enter
+
+Enter on the focused favourite button
+    VoiceOver: "Recipe removed from favourites."
+    VoiceOver: "You are currently on a button. To click this button, press Control-Option-Space."

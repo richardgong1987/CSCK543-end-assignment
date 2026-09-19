@@ -1,0 +1,4 @@
+Login: Enter on the empty form, with focus in the email field
+
+Enter
+    VoiceOver: "Email address Please enter a valid email address. email required invalid data"

@@ -1,0 +1,40 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- banner:
+  - navigation "Main":
+    - link "Recipe Box":
+      - /url: http://recipebox.localhost
+    - link "Recipes":
+      - /url: http://recipebox.localhost/recipes
+    - link "Log in":
+      - /url: http://recipebox.localhost/login
+    - link "Register":
+      - /url: http://recipebox.localhost/register
+- main:
+  - heading "Register" [level=1]
+  - heading "Enter your details below to create your account" [level=2]
+  - text: Name
+  - textbox "Name":
+    - /placeholder: Full name
+  - text: Email address
+  - textbox "Email address":
+    - /placeholder: email@example.com
+  - text: Password
+  - textbox "Password"
+  - text: Confirm password
+  - textbox "Confirm password"
+  - paragraph:
+    - text: We use your name and email only to run your account.
+    - link "How we handle your details":
+      - /url: http://recipebox.localhost/privacy
+  - button "Create account"
+  - paragraph:
+    - text: Already have an account?
+    - link "Log in":
+      - /url: http://recipebox.localhost/login
+- contentinfo:
+  - paragraph: ©2026 Recipe App. All rights reserved.
+  - paragraph:
+    - text: CSK543 Group Project · University of Liverpool ·
+    - link "Privacy notice":
+      - /url: http://recipebox.localhost/privacy

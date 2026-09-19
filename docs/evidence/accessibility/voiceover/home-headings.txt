@@ -1,0 +1,18 @@
+Home page: VoiceOver "next heading" (Control-Option-Command-H)
+
+Tab
+    (VoiceOver said nothing new)
+VO-Cmd-H
+    VoiceOver: "heading level 1 Find something to cook"
+VO-Cmd-H
+    VoiceOver: "heading level 2 Browse by course"
+VO-Cmd-H
+    VoiceOver: "heading level 2 Browse by dietary need"
+VO-Cmd-H
+    VoiceOver: "heading level 2 Or start from what you have"
+VO-Cmd-H
+    VoiceOver: "heading level 2 Highest rated right now"
+VO-Cmd-H
+    VoiceOver: "heading level 3 level 2 link Vegan pancakes"
+VO-Cmd-H
+    VoiceOver: "heading level 3 level 2 link Mushroom doner"

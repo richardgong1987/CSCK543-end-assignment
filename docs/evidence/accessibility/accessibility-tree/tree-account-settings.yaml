@@ -1,0 +1,45 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- banner:
+  - navigation "Main":
+    - link "Recipe Box":
+      - /url: http://recipebox.localhost
+    - link "Recipes":
+      - /url: http://recipebox.localhost/recipes
+    - link "Your account":
+      - /url: http://recipebox.localhost/dashboard
+    - text: Amelia Carter
+    - button "Log out"
+- main:
+  - navigation "Breadcrumb":
+    - link "← Your account":
+      - /url: http://recipebox.localhost/dashboard
+  - heading "Account settings" [level=1]
+  - region "Your details":
+    - heading "Your details" [level=2]
+    - text: Name
+    - textbox "Name": Amelia Carter
+    - text: Email address
+    - textbox "Email address": amelia@example.test
+    - button "Save details"
+  - region "Change your password":
+    - heading "Change your password" [level=2]
+    - text: Current password
+    - textbox "Current password"
+    - text: New password
+    - textbox "New password"
+    - text: Confirm new password
+    - textbox "Confirm new password"
+    - button "Change password"
+  - region "Delete your account":
+    - heading "Delete your account" [level=2]
+    - paragraph: This permanently deletes your account, your saved recipes and your ratings, and it cannot be undone. Enter your password to confirm.
+    - text: Password
+    - textbox "Password"
+    - button "Delete account"
+- contentinfo:
+  - paragraph: ©2026 Recipe App. All rights reserved.
+  - paragraph:
+    - text: CSK543 Group Project · University of Liverpool ·
+    - link "Privacy notice":
+      - /url: http://recipebox.localhost/privacy

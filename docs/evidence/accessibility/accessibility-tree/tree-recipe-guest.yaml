@@ -1,0 +1,104 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- banner:
+  - navigation "Main":
+    - link "Recipe Box":
+      - /url: http://recipebox.localhost
+    - link "Recipes":
+      - /url: http://recipebox.localhost/recipes
+    - link "Log in":
+      - /url: http://recipebox.localhost/login
+    - link "Register":
+      - /url: http://recipebox.localhost/register
+- main:
+  - navigation "Breadcrumb":
+    - link "← All recipes":
+      - /url: http://recipebox.localhost/recipes
+  - article:
+    - heading "Healthy pizza" [level=1]
+    - paragraph: No yeast required for this easy, healthy pizza, topped with colourful vegetables that's ready in 30 minutes. This is a great recipe if you want to feed the kids in a hurry.
+    - paragraph:
+      - link "Log in to save this recipe":
+        - /url: http://recipebox.localhost/login
+    - list "Categories and dietary information":
+      - listitem: Main course
+      - listitem: Egg-free
+      - listitem: Healthy
+      - listitem: Nut-free
+      - listitem: Pregnancy-friendly
+      - listitem: Vegetarian
+    - img "Healthy pizza"
+    - term: Preparation time
+    - definition: less than 30 mins
+    - term: Cooking time
+    - definition: 10 to 30 mins
+    - term: Serves
+    - definition: Serves 2
+    - term: Chef
+    - definition: Justine Pattison
+    - term: Rating
+    - definition: 4.0 out of 5 (3 ratings)
+    - region "Ingredients":
+      - heading "Ingredients" [level=2]
+      - heading "For the base" [level=3]
+      - list:
+        - listitem: 125g wholemeal flour, self-raising, plus extra for dusting
+        - listitem: 1 pinch sea salt, fine
+        - listitem: 125g yoghurt, full-fat plain
+      - heading "For the topping" [level=3]
+      - list:
+        - listitem: 1 pepper, yellow or orange, seeds removed and thinly sliced
+        - listitem: 1 courgette, cut into 1cm slices
+        - listitem: 1 red onion, cut into thin wedges
+        - listitem: 1 tbsp olive oil, extra virgin, plus extra for drizzling
+        - listitem: ½ tsp chilli flakes, dried
+        - listitem: 50g mozzarella, ready-grated, or cheddar or goats' cheese broken into small chunks
+        - listitem: Black pepper, freshly ground
+        - listitem: Basil, fresh leaves, to serve (optional)
+      - heading "For the tomato sauce" [level=3]
+      - list:
+        - listitem: 6 tbsp passata, approximately 100g
+        - listitem: 1 tsp oregano, dried
+    - region "Method":
+      - heading "Method" [level=2]
+      - paragraph: 7 steps, about 1 hr 3 mins in total
+      - list:
+        - listitem:
+          - paragraph: Step 1 · 10 mins
+          - paragraph: Preheat the oven to 220C/200C Fan/Gas 7.
+        - listitem:
+          - paragraph: Step 2 · 20 mins
+          - paragraph: To prepare the topping, put the pepper, courgette, red onion and oil in a bowl, season with lots of black pepper and mix together. Scatter the vegetables over a large baking tray and roast for 15 minutes.
+        - listitem:
+          - paragraph: Step 3 · 8 mins
+          - paragraph: Meanwhile, make the pizza base. Mix the flour and salt in a large bowl. Add the yoghurt and 1 tablespoon of cold water and mix with a spoon, then use your hands to form a soft, spongy dough. Turn out onto a lightly floured surface and knead for about 1 minute.
+        - listitem:
+          - paragraph: Step 4 · 5 mins
+          - paragraph: Using a floured rolling pin, roll the dough into a roughly oval shape, approx. 3mm thick, turning regularly. Ideally, the pizza should be around 30cm long and 20cm wide, but it doesn't matter if the shape is uneven, it just needs to fit onto the same baking tray that the vegetables were cooked on.
+        - listitem:
+          - paragraph: Step 5 · 6 mins
+          - paragraph: Transfer the roasted vegetables to a bowl. Slide the pizza dough onto the baking tray and bake for 5 minutes. Take the tray out of the oven and turn the dough over.
+        - listitem:
+          - paragraph: Step 6 · 12 mins
+          - paragraph: For the tomato sauce, mix the passata with the oregano and spread over the dough. Top with the roasted vegetables, sprinkle with the chilli flakes and then the cheese. Bake the pizza for a further 8-10 minutes, or until the dough is cooked through and the cheese beginning to brown.
+        - listitem:
+          - paragraph: Step 7 · 2 mins
+          - paragraph: Season with black pepper, drizzle with a slurp of olive oil and, if you like, scatter fresh basil leaves on top just before serving.
+    - region "Recipe tips":
+      - heading "Recipe tips" [level=2]
+      - paragraph: You can use any cheese you like for this pizza - it's also a great way to use up a mix of odds and ends from the fridge. Make two pizzas instead of one large pizza if you like. Any leftover passata can be used for pasta sauces, stews or curries.
+    - region "Rate this recipe":
+      - heading "Rate this recipe" [level=2]
+      - paragraph:
+        - link "Log in to rate this recipe":
+          - /url: http://recipebox.localhost/login
+    - paragraph:
+      - text: Recipe and photograph © BBC Food, reproduced for coursework purposes.
+      - link "View the original recipe":
+        - /url: https://www.bbc.co.uk/food/recipes/healthy_pizza_55143
+- contentinfo:
+  - paragraph: ©2026 Recipe App. All rights reserved.
+  - paragraph:
+    - text: CSK543 Group Project · University of Liverpool ·
+    - link "Privacy notice":
+      - /url: http://recipebox.localhost/privacy
