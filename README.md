@@ -17,7 +17,7 @@ This file is only the entry point. Everything else lives in [`docs/`](docs):
 | I want to…                                                        | Read                                               |
 | ----------------------------------------------------------------- | -------------------------------------------------- |
 | Run it on my own machine while developing                         | [docs/setup.md](docs/setup.md)                     |
-| Run it on Apache with XAMPP on Windows, the way it is assessed    | [docs/xampp.md](docs/xampp.md)                     |
+| Run it on XAMPP, the way it is assessed (macOS tested; Linux, Windows) | [docs/xampp.md](docs/xampp.md)                |
 | Run the tests: unit, feature, and end-to-end in Chrome            | [docs/testing.md](docs/testing.md)                 |
 | Find where a feature lives in the code before I change it         | [docs/architecture.md](docs/architecture.md)       |
 | Understand the database schema and why it is shaped that way      | [docs/database-design.md](docs/database-design.md) |
@@ -44,8 +44,9 @@ composer run dev
 Open <http://localhost:8000> in Chrome and log in as `amelia@example.test` with the
 password `password`.
 
-On Windows with XAMPP, follow [docs/xampp.md](docs/xampp.md) from the beginning:
-XAMPP's own PHP is too old for this project, and the guide shows how to replace it.
+With XAMPP, on macOS, Linux or Windows, follow [docs/xampp.md](docs/xampp.md) from the
+beginning: XAMPP's own PHP is too old for this project, and the guide shows how to work
+around it.
 
 ## Before you push
 
