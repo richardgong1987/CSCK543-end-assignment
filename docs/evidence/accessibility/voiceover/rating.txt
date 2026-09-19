@@ -1,8 +1,0 @@
-Recipe page (signed in): Tab into the Overall stars, Right arrow twice
-
-Tab
-    VoiceOver: "3 out of 5 required selected radio button, 3 of 5 Overall (required) group"
-Right arrow
-    VoiceOver: "4 out of 5 required selected radio button, 4 of 5"
-Right arrow
-    VoiceOver: "5 out of 5 required selected radio button, 5 of 5"
