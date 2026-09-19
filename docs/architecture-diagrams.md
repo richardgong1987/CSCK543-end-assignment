@@ -5,27 +5,22 @@ runs on XAMPP, how the code is layered, how two typical requests travel through 
 the front end is built and checked, how it would be deployed for real, and the
 database. [architecture.md](architecture.md) then says which file does what.
 
-Colours mean the same thing in every diagram:
+Each diagram carries its own legend. The colours are kept consistent where they can
+be: orange for people and the browser, blue for our code and the servers that run it,
+green for data, purple for files, and dashed grey for anything outside the project or
+optional.
 
-| Colour | Meaning |
-| --- | --- |
-| Orange | People, and the browser |
-| Blue | Our code and the servers that run it |
-| Green | Data, and the checks that guard it |
-| Purple | Files: static assets, views, logs, source |
-| Dashed grey | Outside the project, or optional |
-
-The diagrams are drawn with [Mermaid](https://mermaid.js.org/), a text format, so they
-are kept in git beside the code and a change to one shows up in a normal diff. The
-sources are in [`diagrams/`](diagrams); the pictures below are exported from them, as
-PNG (shown here, and ready for the report) and SVG (sharp at any zoom). To change a
-diagram, edit its `.mmd` file and export it again ([section 9](#9-changing-a-diagram)).
+The diagrams are drawn in [draw.io](https://www.drawio.com/) (also called
+diagrams.net), laid out by hand so that lines run at right angles and labels do not
+cross. The editable sources are the `.drawio` files in [`diagrams/`](diagrams); the
+pictures below are PNG exports at twice the normal resolution, ready for the report.
+To change a diagram, see [section 9](#9-changing-a-diagram).
 
 ## 1. System context
 
 ![Figure 1 — Recipe Box, who uses it and what it talks to](images/architecture/1-system-context.png)
 
-[SVG](images/architecture/1-system-context.svg) · [source](diagrams/1-system-context.mmd)
+[draw.io source](diagrams/1-system-context.drawio)
 
 - **Three kinds of user.** Visitors can search and read without an account; registered
   users can also save and rate recipes; and any program can use the JSON search API,
@@ -39,7 +34,7 @@ diagram, edit its `.mmd` file and export it again ([section 9](#9-changing-a-dia
 
 ![Figure 2 — how a request is served on XAMPP](images/architecture/2-xampp-runtime.png)
 
-[SVG](images/architecture/2-xampp-runtime.svg) · [source](diagrams/2-xampp-runtime.mmd)
+[draw.io source](diagrams/2-xampp-runtime.drawio)
 
 - **Apache answers static files itself** — CSS, JavaScript, fonts and photos never
   start PHP. `public/.htaccess` compresses text and tells browsers how long to keep
@@ -57,7 +52,7 @@ diagram, edit its `.mmd` file and export it again ([section 9](#9-changing-a-dia
 
 ![Figure 3 — where code goes inside the Laravel application](images/architecture/3-application-layers.png)
 
-[SVG](images/architecture/3-application-layers.svg) · [source](diagrams/3-application-layers.mmd)
+[draw.io source](diagrams/3-application-layers.drawio)
 
 - **Three places for code**, as Laravel lays them out: controllers handle input and
   output, services do the work, and Eloquent models talk to the database. There are no
@@ -75,7 +70,7 @@ diagram, edit its `.mmd` file and export it again ([section 9](#9-changing-a-dia
 
 ![Figure 4 — a recipe search, from click to page](images/architecture/4-search-request.png)
 
-[SVG](images/architecture/4-search-request.svg) · [source](diagrams/4-search-request.mmd)
+[draw.io source](diagrams/4-search-request.drawio)
 
 - **The search is a plain `GET`**, so every result page has a URL that can be shared or
   bookmarked.
@@ -91,7 +86,7 @@ diagram, edit its `.mmd` file and export it again ([section 9](#9-changing-a-dia
 
 ![Figure 5 — saving a favourite with and without JavaScript](images/architecture/5-favourite-toggle.png)
 
-[SVG](images/architecture/5-favourite-toggle.svg) · [source](diagrams/5-favourite-toggle.mmd)
+[draw.io source](diagrams/5-favourite-toggle.drawio)
 
 - **One address, two kinds of answer.** The same controller returns JSON when the script
   asks for it, and a redirect with a message for an ordinary form.
@@ -105,7 +100,7 @@ diagram, edit its `.mmd` file and export it again ([section 9](#9-changing-a-dia
 
 ![Figure 6 — building the front end, and the checks on every push](images/architecture/6-build-and-ci.png)
 
-[SVG](images/architecture/6-build-and-ci.svg) · [source](diagrams/6-build-and-ci.mmd)
+[draw.io source](diagrams/6-build-and-ci.drawio)
 
 - **`pnpm run build` writes everything the browser needs** into `public/build`, with a
   hash of each file's content in its name. A changed file gets a new name, which is why
@@ -121,7 +116,7 @@ diagram, edit its `.mmd` file and export it again ([section 9](#9-changing-a-dia
 
 ![Figure 7 — proposed production deployment](images/architecture/7-production-deployment.png)
 
-[SVG](images/architecture/7-production-deployment.svg) · [source](diagrams/7-production-deployment.mmd)
+[draw.io source](diagrams/7-production-deployment.drawio)
 
 **Nothing here has been deployed**; it is the design from the proposal (§10), written
 up in [deployment.md](deployment.md).
@@ -135,35 +130,46 @@ up in [deployment.md](deployment.md).
 - **A CDN is optional**, and not used for the XAMPP submission; when it would be worth
   it is discussed in [sustainability.md](sustainability.md#4-recommended-for-production-not-done-here).
 
-## 8. Database
+## 8. Data model
 
-![Figure 8 — the database schema](images/architecture/8-database.png)
+![Figure 8 — conceptual data model](images/architecture/8-data-model.png)
 
-[SVG](images/architecture/8-database.svg)
+[draw.io source](diagrams/8-data-model.drawio)
 
-The source of this diagram is the ER diagram in
-[database-design.md](database-design.md#1-er-diagram), which also explains every table
-and the reasons behind the design. `recipes` is at the centre: each recipe has one chef,
-cuisine and two time bands, many steps and ingredient lines, and belongs to many courses
-and dietary labels. Users reach recipes through `favourites` and `ratings`.
+This is the conceptual view of the database: one box per table, named in plain English
+with the table name underneath, and no columns. The full ER diagram, with every column,
+key and constraint, is in [database-design.md](database-design.md#1-er-diagram), which
+also explains the reasons behind the design.
+
+- **Green boxes are the principal entities**: things that exist in their own right, such
+  as recipes, users, chefs and ingredients. **Blue boxes are associative or supporting
+  entities**: they exist only to connect two others, or as a part of a recipe.
+- **Solid arrows are relationships, read along the arrow**: a chef *writes* a recipe; a
+  unit *measures* an ingredient line. **Dashed lines** join an associative entity to its
+  other side: a favourite links a user to a recipe.
+- **`recipes` is the centre.** Each recipe has one chef and one cuisine, a band for its
+  preparation time and one for its cooking time, method steps, and ingredient lines
+  that may be grouped under sections. Courses and dietary labels attach through their
+  own junction tables, because a recipe can have several of each.
+- **Users reach recipes in only two ways**, by saving them (`favourites`) and by rating
+  them (`ratings`). Both allow one row per user and recipe.
 
 ## 9. Changing a diagram
 
-Edit the `.mmd` file in [`diagrams/`](diagrams) — the
-[Mermaid live editor](https://mermaid.live) previews it as you type — then export it
-from the project root. This needs Node and downloads Mermaid's command-line tool on
-first use:
+Open the `.drawio` file in [app.diagrams.net](https://app.diagrams.net) (free, in the
+browser, nothing to install) or in the draw.io desktop app, edit it, and save it back
+over the same file. The PNGs also carry a copy of their diagram, so draw.io can open a
+PNG directly as well.
+
+Then export the PNG again. From the draw.io editor: *File → Export as → PNG*, zoom 200 %,
+border 24, "Include a copy of my diagram" ticked, saved over the old file in
+`docs/images/architecture`. Or from the command line, with the desktop app installed
+(`brew install --cask drawio` on macOS):
 
 ```sh
-for f in docs/diagrams/*.mmd; do
-    name=$(basename "$f" .mmd)
-    for ext in svg png; do
-        npx -y -p @mermaid-js/mermaid-cli mmdc -c docs/diagrams/mermaid.config.json \
-            -b white -s 2 -i "$f" -o "docs/images/architecture/$name.$ext"
-    done
+for f in docs/diagrams/*.drawio; do
+    drawio -x -f png -s 2 -b 24 -e -o "docs/images/architecture/$(basename "$f" .drawio).png" "$f"
 done
 ```
 
-Figure 8 comes from `database-design.md`; to export it, copy its `mermaid` block into a
-file named `8-database.mmd` and run the same command on that file. The diagrams were
-last exported with mermaid-cli 11.17 on 19 September 2026.
+The diagrams were last exported with draw.io 31.4.5 on 19 September 2026.
