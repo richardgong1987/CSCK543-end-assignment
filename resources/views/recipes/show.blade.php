@@ -58,8 +58,9 @@
         </header>
 
         @if ($recipe->image_path)
-            <img src="{{ asset($recipe->image_path) }}" alt="{{ $recipe->title }}" width="832" height="468"
-                class="mb-8 aspect-video w-full rounded-lg object-cover">
+            <x-recipe-image :path="$recipe->image_path" sizes="(min-width: 896px) 832px, calc(100vw - 48px)"
+                alt="{{ $recipe->title }}" fetchpriority="high"
+                class="mb-8 aspect-video w-full rounded-lg object-cover" />
         @endif
 
         <dl

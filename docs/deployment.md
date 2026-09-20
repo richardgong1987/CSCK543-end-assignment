@@ -38,24 +38,27 @@ php artisan view:cache
 `config:cache` freezes `.env` into a cached file, so run it again after any change to
 `.env`.
 
+### Compression
+
+`public/.htaccess` compresses HTML, CSS, JavaScript and JSON, which cuts the stylesheet
+from 66 to 14 KiB ([performance.md](performance.md#3-what-was-fixed)). It needs Apache's
+`mod_deflate`, which XAMPP loads by default; on Debian or Ubuntu, run
+`sudo a2enmod deflate`. The same file declares the WebP type for the recipe photos, which
+older Apache versions do not know. On nginx, set `gzip on;` with the same `gzip_types`.
+
 ### Caching the built assets
 
-Lighthouse flags that assets arrive without caching headers (PHP's built-in server sends
-none). Every file Vite writes to `public/build` has a content hash in its name, so it can
-be cached for a year: a changed file gets a new name. Recipe images keep their names, so
-give them a shorter lifetime. With `mod_headers` enabled, in the virtual host:
+`public/.htaccess` also sets how long browsers keep static files
+([sustainability.md](sustainability.md#3-what-was-changed)). Every file Vite writes to
+`public/build/assets` has a content hash in its name, so it is cached for a year: a
+changed file gets a new name. Recipe photos keep their names, so they are cached for a
+week. It needs `mod_headers`, which XAMPP loads by default; on Debian or Ubuntu, run
+`sudo a2enmod headers`. PHP's built-in server (`php artisan serve`) ignores `.htaccess`,
+so these headers appear only under Apache.
 
-```apache
-<Directory "C:/xampp/htdocs/CSCK543-end-assignment/public/build">
-    Header set Cache-Control "public, max-age=31536000, immutable"
-</Directory>
-<Directory "C:/xampp/htdocs/CSCK543-end-assignment/public/images">
-    Header set Cache-Control "public, max-age=604800"
-</Directory>
-```
-
-Put this in the virtual host rather than a `.htaccess` inside `public/build`, because
-every `pnpm run build` empties that folder.
+A CDN in front of the site can reuse the same lifetimes; see
+[sustainability.md](sustainability.md#4-recommended-for-production-not-done-here) for
+when one is worth it.
 
 ### Least-privilege database accounts
 
@@ -118,6 +121,10 @@ Laravel application (Apache or nginx + PHP-FPM)
 MySQL — no public address, no public port
 ```
 
+Figure 7 in [architecture-diagrams.md](architecture-diagrams.md#7-production-deployment-proposed)
+draws the same design with the mail service, backups, administrator access and an
+optional CDN.
+
 - **Network segmentation and firewall rules.** The proxy accepts 80 and 443 from
   anywhere; the application server accepts traffic only from the proxy; MySQL accepts
   3306 only from the application server.
@@ -152,8 +159,9 @@ and pull request, so a newly published advisory fails the build.
 
 `tests/load/recipe-search-api.js` is a k6 script with a `load` scenario (20 steady
 virtual users for two minutes) and a `stress` scenario (ramping to 400, then back to 0
-to watch recovery). It has **not been run yet** — k6 was not installed on the machine
-that wrote it. To run it, on a local copy only:
+to watch recovery). **It was run on 19 September 2026; the results, and the capacity
+recommendations for a production server, are in [load-testing.md](load-testing.md).** To
+run it again, on a local copy only:
 
 ```sh
 API_RECIPE_SEARCH_PER_MINUTE=1000000 php artisan serve

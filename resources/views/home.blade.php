@@ -38,13 +38,13 @@
     </section>
     {{-- Hero Section --}}
     <section class="mb-10">
-        <img
-            src="{{ asset('images/recipes/mushroom-doner.jpg')}}"
+        <x-recipe-image
+            path="images/recipes/mushroom-doner.jpg"
+            sizes="(min-width: 896px) 832px, calc(100vw - 48px)"
             alt="A colorful picture of delicious mushroom doner"
-            width="832"
-            height="468"
+            fetchpriority="high"
             class="max-h-80 w-full rounded-lg object-cover shadow-md"
-        >
+        />
     </section>
 
     <section aria-labelledby="courses-heading" class="mb-10">

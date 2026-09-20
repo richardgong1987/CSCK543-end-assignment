@@ -23,3 +23,28 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# XAMPP's list of file types predates WebP, so recipe photos would be sent without one.
+<IfModule mod_mime.c>
+    AddType image/webp .webp
+</IfModule>
+
+# Compress text responses: the stylesheet shrinks from 66 KiB to about 13 KiB
+# (docs/performance.md, PC8). Images and fonts are already compressed formats.
+<IfModule mod_deflate.c>
+    # XAMPP labels .js files with the old application/x-javascript type.
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/x-javascript application/json image/svg+xml
+</IfModule>
+
+# Let browsers keep static files, so a later visit does not ask for them again
+# (docs/sustainability.md, WS2). Pages themselves are never cached: Laravel marks them private.
+<IfModule mod_headers.c>
+    # Built files have a content hash in their name, so a changed file gets a new URL.
+    <If "%{REQUEST_URI} =~ m#/build/assets/#">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </If>
+    # Recipe photos keep their name when replaced, so browsers check again after a week.
+    <ElseIf "%{REQUEST_URI} =~ m#/images/#">
+        Header set Cache-Control "public, max-age=604800"
+    </ElseIf>
+</IfModule>

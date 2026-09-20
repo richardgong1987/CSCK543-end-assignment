@@ -1,0 +1,184 @@
+<mxfile host="drawio-plugin" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36" modified="2026-09-19T17:05:49.086Z" version="22.1.22" etag="y3urIGYNKE07LygUNrfz" type="embed">
+  <diagram id="4-search-request" name="A recipe search">
+    <mxGraphModel dx="710" dy="689" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="p-user" value="Visitor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeWidth=2;fontSize=14;fontStyle=1;fontFamily=Helvetica;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="72" y="30" width="36" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="life-user" value="" style="endArrow=none;dashed=1;strokeWidth=1.5;strokeColor=#999999;html=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="90" y="124" as="sourcePoint" />
+            <mxPoint x="90" y="880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p-chrome" value="&lt;b&gt;Chrome&lt;/b&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=15;fontFamily=Helvetica;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="235" y="40" width="210" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="life-chrome" value="" style="endArrow=none;dashed=1;strokeWidth=1.5;strokeColor=#999999;html=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="104" as="sourcePoint" />
+            <mxPoint x="340" y="880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p-apache" value="&lt;b&gt;Apache&lt;/b&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=15;fontFamily=Helvetica;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="495" y="40" width="210" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="life-apache" value="" style="endArrow=none;dashed=1;strokeWidth=1.5;strokeColor=#999999;html=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="600" y="104" as="sourcePoint" />
+            <mxPoint x="600" y="880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p-laravel" value="&lt;b&gt;Laravel&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;PHP-FPM&lt;/span&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=15;fontFamily=Helvetica;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="755" y="40" width="210" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="life-laravel" value="" style="endArrow=none;dashed=1;strokeWidth=1.5;strokeColor=#999999;html=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="860" y="104" as="sourcePoint" />
+            <mxPoint x="860" y="880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p-search" value="&lt;b&gt;RecipeSearch&lt;/b&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=15;fontFamily=Helvetica;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="1015" y="40" width="210" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="life-search" value="" style="endArrow=none;dashed=1;strokeWidth=1.5;strokeColor=#999999;html=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1120" y="104" as="sourcePoint" />
+            <mxPoint x="1120" y="880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p-db" value="&lt;b&gt;MariaDB&lt;/b&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=15;fontFamily=Helvetica;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="1275" y="40" width="210" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="life-db" value="" style="endArrow=none;dashed=1;strokeWidth=1.5;strokeColor=#999999;html=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1380" y="104" as="sourcePoint" />
+            <mxPoint x="1380" y="880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" value="1. types &amp;quot;pizza&amp;quot;, sorts by &amp;quot;Quickest&amp;quot;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontStyle=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="90" y="160" as="sourcePoint" />
+            <mxPoint x="340" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" value="2. GET /recipes?q=pizza&amp;amp;sort=quickest" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontStyle=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="210" as="sourcePoint" />
+            <mxPoint x="600" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" value="3. no such file, so index.php (FastCGI)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontStyle=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="600" y="260" as="sourcePoint" />
+            <mxPoint x="860" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" value="4. middleware: session, CSRF token, security headers" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;align=left;spacingLeft=6;labelBackgroundColor=#ffffff;fontStyle=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="860" y="310" as="sourcePoint" />
+            <mxPoint x="861" y="336" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="904" y="310" />
+              <mxPoint x="904" y="336" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" value="5. RecipeController@index passes the query string" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontStyle=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="860" y="374" as="sourcePoint" />
+            <mxPoint x="1120" y="374" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" value="6. drop unknown filters, check the sort against SORTS" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;align=left;spacingLeft=6;labelBackgroundColor=#ffffff;fontStyle=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1120" y="424" as="sourcePoint" />
+            <mxPoint x="1121" y="450" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1164" y="424" />
+              <mxPoint x="1164" y="450" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" value="7. queries with bound parameters" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontStyle=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1120" y="488" as="sourcePoint" />
+            <mxPoint x="1380" y="488" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" value="8. up to 12 recipes and the total" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;dashed=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontStyle=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1380" y="538" as="sourcePoint" />
+            <mxPoint x="1120" y="538" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" value="9. paginated recipes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;dashed=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontStyle=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1120" y="588" as="sourcePoint" />
+            <mxPoint x="860" y="588" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" value="10. render recipes/index.blade.php, nonce in the CSP" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;align=left;spacingLeft=6;labelBackgroundColor=#ffffff;fontStyle=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="860" y="638" as="sourcePoint" />
+            <mxPoint x="861" y="664" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="904" y="638" />
+              <mxPoint x="904" y="664" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m11" value="11. HTML, Cache-Control: no-cache, private" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;dashed=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontStyle=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="860" y="702" as="sourcePoint" />
+            <mxPoint x="600" y="702" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m12" value="12. HTML, gzip-compressed" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;dashed=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontStyle=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="600" y="752" as="sourcePoint" />
+            <mxPoint x="340" y="752" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m13" value="13. CSS, JavaScript, fonts, visible photos" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontStyle=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="802" as="sourcePoint" />
+            <mxPoint x="600" y="802" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m14" value="14. files cached for a year (photos a week)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;dashed=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontStyle=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="600" y="852" as="sourcePoint" />
+            <mxPoint x="340" y="852" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="620" y="900" width="620" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-title" value="Legend" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontFamily=Helvetica;fontSize=17;" parent="1" vertex="1">
+          <mxGeometry x="636" y="908" width="120" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-0" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="638" y="960" as="sourcePoint" />
+            <mxPoint x="682" y="960" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend-0-text" value="Request" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="694" y="940" width="226" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;html=1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2;fontStyle=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Helvetica;dashed=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="928" y="960" as="sourcePoint" />
+            <mxPoint x="972" y="960" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend-1-text" value="Reply" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="984" y="940" width="226" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
