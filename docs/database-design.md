@@ -8,6 +8,10 @@ they do.
 **Target:** MySQL 9 (`utf8mb4`, InnoDB). The test suite runs on SQLite in memory, so
 the migrations avoid MySQL-only syntax except where noted.
 
+To read the schema as SQL rather than as migrations, or to load it without running
+them, [database/sql](../database/sql/README.md) holds a mysqldump of these tables and
+of the seeded data.
+
 ---
 
 ## 1. ER diagram

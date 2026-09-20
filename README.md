@@ -58,6 +58,7 @@ All tests were run on 19 September 2026, against the XAMPP copy of the site.
 | See how the pieces fit before reading code                          | [docs/architecture-diagrams.md](docs/architecture-diagrams.md) |
 | Find where a feature lives in the code before I change it           | [docs/architecture.md](docs/architecture.md)       |
 | Understand the database schema and why it is shaped that way        | [docs/database-design.md](docs/database-design.md) |
+| Import the database from a MySQL dump, instead of running migrations | [database/sql/README.md](database/sql/README.md)   |
 | See what is finished and what is still open against the brief       | [docs/status.md](docs/status.md)                   |
 
 The assignment brief and our technical proposal are in
@@ -88,6 +89,7 @@ database/
   migrations/           the schema — see docs/database-design.md for why it is shaped so
   seeders/              the recipes taken from BBC Food
   factories/            test data
+  sql/                  a mysqldump of the same schema and data, to import directly
 tests/
   Unit/, Feature/       PHPUnit via Pest, run by `composer test`
   e2e/                  Playwright against real Chrome, run by `pnpm run test:e2e`
@@ -117,6 +119,12 @@ composer run dev
 
 Open <http://localhost:8000> in Chrome and log in as `amelia@example.test` with the
 password `password`.
+
+To build the database from a plain SQL dump rather than from the migrations — which is
+also the quickest way to read the schema as SQL — import the two files in
+[database/sql](database/sql/README.md) in place of `php artisan migrate --seed`. They
+carry the same tables and the same seeded recipes, and import into both MySQL and
+XAMPP's MariaDB.
 
 With XAMPP, on macOS, Linux or Windows, follow [docs/xampp.md](docs/xampp.md) from the
 beginning: XAMPP's own PHP is too old for this project, and the guide shows how to work
