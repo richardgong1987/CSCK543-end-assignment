@@ -63,6 +63,44 @@ All tests were run on 19 September 2026, against the XAMPP copy of the site.
 The assignment brief and our technical proposal are in
 [docs/requirement](docs/requirement).
 
+## Where things live
+
+A standard Laravel 13 layout, so `bootstrap`, `config`, `public`, `storage` and `vendor`
+hold what they always do. These are the parts particular to this project:
+
+```
+app/
+  Http/Controllers/     one per page; Api/ serves the JSON search endpoint
+  Http/Middleware/      SecurityHeaders — the response headers §10 asks for
+  Http/Requests/        form validation rules, currently Auth/LoginRequest only
+  Http/Resources/       RecipeResource — the JSON shape the search API returns
+  Models/               14 Eloquent models: Recipe and everything it joins to
+  Services/             RecipeSearch — the search, filter and sort logic
+  Support/              Duration — parsing and formatting cooking times
+resources/
+  views/                Blade templates, a folder per feature, shared parts in components/
+  js/                   vanilla JavaScript, one file per behaviour — no front-end framework
+  css/                  the Tailwind entry point
+routes/
+  web.php               every page
+  api.php               /api/recipes, used by the search box
+database/
+  migrations/           the schema — see docs/database-design.md for why it is shaped so
+  seeders/              the recipes taken from BBC Food
+  factories/            test data
+tests/
+  Unit/, Feature/       PHPUnit via Pest, run by `composer test`
+  e2e/                  Playwright against real Chrome, run by `pnpm run test:e2e`
+  load/                 the k6 script behind appendix D
+docs/
+  *.md                  the appendix material listed above
+  images/<topic>/       figures, a folder per document
+  diagrams/             .drawio sources for the eight architecture diagrams
+```
+
+To find the code behind a particular page, [docs/architecture.md](docs/architecture.md)
+lists them by URL rather than by folder.
+
 ## Quick start
 
 On macOS or Linux, with PHP 8.4+, Composer, pnpm and MySQL already installed —
