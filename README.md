@@ -34,19 +34,7 @@ document.
 
 All tests were run on 19 September 2026, against the XAMPP copy of the site.
 
-**Still needs the group before submission** — each document says exactly what to do:
 
-- **Sign off the targets**: the sign-off tables at the end of
-  [performance.md](docs/performance.md#6-sign-off) and
-  [sustainability.md](docs/sustainability.md#7-sign-off), and the pass thresholds in
-  [load-testing.md](docs/load-testing.md#1-test-set-up).
-- **A keyboard-only check by a person**, using the checklist in
-  [accessibility.md, section 5](docs/accessibility.md#5-keyboard-only-check-by-a-person).
-- **Real phones and tablets**: [responsive.md, section 5](docs/responsive.md#5-real-devices-by-a-person).
-- **XAMPP on Windows**, which is written up but not yet tried:
-  [xampp.md, section 5](docs/xampp.md#5-windows-not-tested).
-
-[docs/status.md](docs/status.md) tracks everything against the brief.
 
 ## Working on the code
 
@@ -96,7 +84,7 @@ tests/
   load/                 the k6 script behind appendix D
 docs/
   *.md                  the appendix material listed above
-  images/<topic>/       figures, a folder per document
+  ireadmages/<topic>/       figures, a folder per document
   diagrams/             .drawio sources for the eight architecture diagrams
 ```
 
