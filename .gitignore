@@ -30,6 +30,3 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
-composer.lock
-package.xml
-pnpm-lock.yaml
